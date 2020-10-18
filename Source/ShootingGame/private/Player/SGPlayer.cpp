@@ -471,6 +471,7 @@ void ASGPlayer::CreateWeapon()
 		SGCHECK(Rifle);
 		Rifle->SetController(SGPlayerController);
 		Rifle->SetControllingPawn(this);
+		Rifle->InitializeAmmo();
 		Rifle->CreateProjectilePool();
 		Rifle->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("Weapon_Attach"));
 	}
@@ -479,10 +480,11 @@ void ASGPlayer::CreateWeapon()
 	if (PistolData != nullptr)
 	{
 		Pistol = Cast<ASGWeapon>(GetWorld()->SpawnActor(PistolData->Class, &FVector::ZeroVector, &FRotator::ZeroRotator));
+		SGCHECK(Pistol);
 		Pistol->SetController(SGPlayerController);
 		Pistol->SetControllingPawn(this);
+		Pistol->InitializeAmmo();
 		Pistol->CreateProjectilePool();
-		SGCHECK(Pistol);
 		Pistol->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("Weapon_Attach"));
 	}
 

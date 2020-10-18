@@ -1,6 +1,7 @@
 #include "SGWeapon.h"
 #include "SGProjectile.h"
 #include "PoolService.h"
+#include "SGSaveGame.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ASGWeapon::ASGWeapon()
@@ -209,6 +210,29 @@ void ASGWeapon::SetControllingPawn(APawn * NewPawn)
 	ControllingPawn = NewPawn;
 }
 
+void ASGWeapon::InitializeAmmo()
+{
+	USGSaveGame* SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
+	if (SGSaveGame != nullptr)
+	{
+		switch (Type)
+		{
+		case WeaponType::Rifle:
+			Ammo = SGSaveGame->RifleAmmo;
+			MaxAmmo = SGSaveGame->RifleMaxAmmo;
+			SGLOG(Warning, TEXT("Load Rifle Max Ammo = %d"), SGSaveGame->RifleMaxAmmo);
+			SGLOG(Warning, TEXT("Load Rifle Ammo = %d"), SGSaveGame->RifleAmmo);
+			break;
+		case WeaponType::Pistol:
+			Ammo = SGSaveGame->PistolAmmo;
+			MaxAmmo = SGSaveGame->PistolMaxAmmo;
+			SGLOG(Warning, TEXT("Load Pistol Max Ammo = %d"), SGSaveGame->PistolMaxAmmo);
+			SGLOG(Warning, TEXT("Load Pistol Ammo = %d"), SGSaveGame->PistolAmmo);
+			break;
+		}
+	}
+}
+
 int32 ASGWeapon::GetAmmo() const
 {
 	return Ammo;
@@ -237,7 +261,6 @@ int32 ASGWeapon::GetDamage() const
 
 void ASGWeapon::CreateProjectilePool()
 {
-	//MuzzleLocation = MeshComponent->GetSocketLocation(TEXT("Muzzle"));
 	MuzzleRotation = MeshComponent->GetSocketRotation(TEXT("Muzzle"));
 
 	for (int ProjectilePoolIndex = 0; ProjectilePoolIndex < 10; ProjectilePoolIndex++)

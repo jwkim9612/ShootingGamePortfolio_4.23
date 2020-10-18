@@ -37,6 +37,8 @@ public:
 	void SetController(AController* NewController);
 	void SetControllingPawn(APawn* NewPawn);
 
+	void InitializeAmmo();
+
 	int32 GetAmmo() const;
 	int32 GetMaxAmmo() const;
 	FVector GetMuzzleLocation() const;

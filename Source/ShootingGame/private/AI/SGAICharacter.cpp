@@ -50,7 +50,14 @@ float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent,
 	if (Health <= 0)
 	{
 		DropItem();
-		Destroy();
+
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+		GetMesh()->SetSimulatePhysics(true);
+
+		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			Destroy();
+		}), 2.0f, false);
 	}
 
 	return FinalDamage;

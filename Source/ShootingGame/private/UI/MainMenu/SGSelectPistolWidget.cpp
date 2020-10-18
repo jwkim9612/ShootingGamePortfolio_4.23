@@ -2,6 +2,7 @@
 #include "SGMainMenuPlayerController.h"
 #include "SGWeaponButton.h"
 #include "SGGameInstance.h"
+#include "SGSaveGame.h"
 #include "UIService.h"
 #include "Components/Button.h"
 
@@ -27,9 +28,18 @@ void USGSelectPistolWidget::UpdateWeaponButtons()
 
 void USGSelectPistolWidget::OnSelectClicked()
 {
-	SGGameInstance->LoadStage();
+	USGSaveGame* SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
+	if (SGSaveGame != nullptr)
+	{
+		if (UGameplayStatics::DeleteGameInSlot(TEXT("PlayerSaveData"), 0))
+		{
+			SGLOG(Warning, TEXT("Delete Success"));
+		}
+	}
 
-	//UGameplayStatics::OpenLevel(this, TEXT("Test"));
+	//SGGameInstance->LoadStage();
+
+	UGameplayStatics::OpenLevel(this, TEXT("Test"));
 }
 
 void USGSelectPistolWidget::OnBackClicked()

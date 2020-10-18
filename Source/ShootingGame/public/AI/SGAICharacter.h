@@ -38,4 +38,7 @@ private:
 
 	UPROPERTY(EditAnywhere, category = "DropAmmo", meta = (AllowPrivateAccess = true))
 	TSubclassOf<class ASGAmmo> DropAmmo;
+
+private:
+	FTimerHandle DeadTimerHandle;
 };
