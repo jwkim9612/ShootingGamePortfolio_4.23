@@ -37,9 +37,9 @@ void USGSelectPistolWidget::OnSelectClicked()
 		}
 	}
 
-	//SGGameInstance->LoadStage();
+	SGGameInstance->LoadStage();
 
-	UGameplayStatics::OpenLevel(this, TEXT("Test"));
+	//UGameplayStatics::OpenLevel(this, TEXT("Test"));
 }
 
 void USGSelectPistolWidget::OnBackClicked()

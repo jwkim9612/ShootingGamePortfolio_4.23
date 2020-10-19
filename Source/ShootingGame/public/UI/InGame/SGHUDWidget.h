@@ -19,6 +19,7 @@ public:
 	void PlayFadeInHPBarAnimation();
 	void PlayFadeOutHPBarAnimation();
 	void PlayFadeHitEffectAnimation();
+	void PlayFadeObjectiveAnimation();
 	void PlayFadeInScreenAnimation();
 	float PlayFadeOutScreenAnimation();
 
@@ -40,6 +41,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class USGWeaponHUD* SGWeaponHUD;
+
+	UPROPERTY(meta = (BindWidget))
+	class USGObjectiveHUD* SGObjectiveHUD;
 
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* FadeInHPBar;

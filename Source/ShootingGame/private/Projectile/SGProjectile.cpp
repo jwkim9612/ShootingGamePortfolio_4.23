@@ -1,5 +1,6 @@
 #include "SGProjectile.h"
 #include "SGGameInstance.h"
+#include "SGAICharacter.h"
 #include "ProjectileService.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -9,6 +10,7 @@ ASGProjectile::ASGProjectile()
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComponent"));
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
 	
+	MeshComponent->SetCollisionProfileName(TEXT("Projectile"));
 	SetRootComponent(MeshComponent);
 	ParticleSystemComponent->SetupAttachment(RootComponent);
 
@@ -86,9 +88,15 @@ void ASGProjectile::ClearDisableTimer()
 void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UParticleSystem* ParticleSystem;
-	ACharacter* TargetActor = Cast<ACharacter>(OtherActor);
+	ASGAICharacter* TargetActor = Cast<ASGAICharacter>(OtherActor);
 	if (TargetActor != nullptr)
 	{
+		if (TargetActor->IsDead())
+		{
+			SGLOG(Warning, TEXT("Return"));
+			return;
+		}
+
 		FDamageEvent DamageEvent;
 		TargetActor->TakeDamage(Damage, DamageEvent, Controller, ControllingPawn);
 

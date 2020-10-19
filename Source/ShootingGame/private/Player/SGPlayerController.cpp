@@ -42,6 +42,7 @@ void ASGPlayerController::BeginPlay()
 	SetInputMode(Mode);
 
 	SGHUDWidget->PlayFadeInScreenAnimation();
+	SGHUDWidget->PlayFadeObjectiveAnimation();
 }
 
 USGHUDWidget * ASGPlayerController::GetSGHUDWidget() const

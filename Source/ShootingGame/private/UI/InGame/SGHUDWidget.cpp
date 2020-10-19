@@ -3,6 +3,7 @@
 #include "SGCrossHair.h"
 #include "SGWeaponHUD.h"
 #include "SGHitEffect.h"
+#include "SGObjectiveHUD.h"
 #include "SGPlayer.h"
 
 bool USGHUDWidget::Initialize()
@@ -38,6 +39,14 @@ void USGHUDWidget::PlayFadeHitEffectAnimation()
 {
 	SGCHECK(SGHitEffect);
 	SGHitEffect->PlayFadeAnimation();
+}
+
+void USGHUDWidget::PlayFadeObjectiveAnimation()
+{
+
+	SGCHECK(SGObjectiveHUD);
+	SGObjectiveHUD->UpdateText();
+	SGObjectiveHUD->PlayFadeAnimation();
 }
 
 void USGHUDWidget::PlayFadeInScreenAnimation()

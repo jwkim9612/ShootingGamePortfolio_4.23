@@ -19,11 +19,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+public:
+	void SetDead(bool bDead);
+	bool IsDead() const;
+
 private:
 	UFUNCTION()
 	void OnSeePlayer(APawn* Pawn);
 
 	void DropItem();
+	void Dead();
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
@@ -41,4 +46,6 @@ private:
 
 private:
 	FTimerHandle DeadTimerHandle;
+
+	bool bIsDead;
 };

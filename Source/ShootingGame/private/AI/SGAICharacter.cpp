@@ -49,18 +49,20 @@ float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent,
 
 	if (Health <= 0)
 	{
-		DropItem();
-
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
-		GetMesh()->SetSimulatePhysics(true);
-
-		GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-			Destroy();
-		}), 2.0f, false);
+		Dead();
 	}
 
 	return FinalDamage;
+}
+
+void ASGAICharacter::SetDead(bool bDead)
+{
+	bIsDead = bDead;
+}
+
+bool ASGAICharacter::IsDead() const
+{
+	return bIsDead;
 }
 
 void ASGAICharacter::OnSeePlayer(APawn * Pawn)
@@ -78,4 +80,24 @@ void ASGAICharacter::DropItem()
 	{
 		GetWorld()->SpawnActor<ASGAmmo>(DropAmmo, GetActorLocation(), FRotator::ZeroRotator);
 	}
+}
+
+void ASGAICharacter::Dead()
+{
+	if (bIsDead)
+	{
+		return;
+	}
+
+	bIsDead = true;
+
+	DropItem();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
+
+	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+		Destroy();
+	}), 2.0f, false);
 }

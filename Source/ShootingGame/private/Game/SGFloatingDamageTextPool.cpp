@@ -49,7 +49,7 @@ void ASGFloatingDamageTextPool::CreateFloatingDamageTextComponentPool()
 		FloatingDamageTextComponentPool.Add(FloatingTextWidget);
 	}
 
-	static ConstructorHelpers::FClassFinder<UUserWidget> FloatingDamageTextWidgetClass(TEXT("/Game/BluePrint/UI/InGame/BP_FloatingDamageText.BP_FloatingDamageText_C"));
+	static ConstructorHelpers::FClassFinder<UUserWidget> FloatingDamageTextWidgetClass(TEXT("/Game/BluePrint/UI/InGame/BP_SGFloatingDamageText.BP_SGFloatingDamageText_C"));
 	if (FloatingDamageTextWidgetClass.Succeeded())
 	{
 		for (auto& FloatingDamageTextComponent : FloatingDamageTextComponentPool)

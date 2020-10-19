@@ -123,5 +123,8 @@ public:
 	FString Description;
 
 	UPROPERTY(EditDefaultsOnly)
+	FString Objective;
+
+	UPROPERTY(EditDefaultsOnly)
 	class UTexture2D* Image;
 };
