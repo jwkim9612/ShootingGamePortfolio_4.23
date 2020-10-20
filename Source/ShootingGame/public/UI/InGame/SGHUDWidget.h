@@ -28,6 +28,7 @@ public:
 	class USGHPBar* GetSGHPBar() const;
 	class USGCrossHair* GetSGCrossHair() const;
 	class USGWeaponHUD* GetWeaponHUD() const;
+	class USGObjectiveHUD* GetObjectiveHUD() const;
 
 private:
 	UPROPERTY(meta = (BindWidget))

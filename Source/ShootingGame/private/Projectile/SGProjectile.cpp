@@ -98,17 +98,20 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		}
 
 		FDamageEvent DamageEvent;
-		TargetActor->TakeDamage(Damage, DamageEvent, Controller, ControllingPawn);
+		float FinalDamage;
 
 		if (Hit.BoneName.ToString().Equals(TEXT("head")))
 		{
+			FinalDamage = Damage * 2;
 			SGGameInstance->PlayFloatingDamageText(Damage * 2.0f, Hit.Location, true);
 		}
 		else
 		{
+			FinalDamage = Damage;
 			SGGameInstance->PlayFloatingDamageText(Damage, Hit.Location);
 		}
 
+		TargetActor->TakeDamage(FinalDamage, DamageEvent, Controller, ControllingPawn);
 		ParticleSystem = SGGameInstance->TryGetParticleSystem(FString("HitCharacter"));
 	}
 	else

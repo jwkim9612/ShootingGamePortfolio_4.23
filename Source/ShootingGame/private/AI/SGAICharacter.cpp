@@ -90,6 +90,7 @@ void ASGAICharacter::Dead()
 	}
 
 	bIsDead = true;
+	OnDead.Broadcast();
 
 	DropItem();
 

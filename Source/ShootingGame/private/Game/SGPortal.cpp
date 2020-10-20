@@ -3,6 +3,7 @@
 #include "SGGameInstance.h"
 #include "SGPlayerState.h"
 #include "SGHUDWidget.h"
+#include "SGLevelScriptActorBase.h"
 
 ASGPortal::ASGPortal()
 {
@@ -13,6 +14,8 @@ ASGPortal::ASGPortal()
 	ParticleSystem->SetupAttachment(RootComponent);
 
 	CapsuleComponent->SetCollisionProfileName(TEXT("OverlapOnlyPawn"));
+
+	Disable();
 }
 
 void ASGPortal::BeginPlay()
@@ -27,6 +30,10 @@ void ASGPortal::BeginPlay()
 	{
 		SGHUDWidget = SGPlayerController->GetSGHUDWidget();
 	}
+
+	ASGLevelScriptActorBase* SGLevelScriptActor = Cast<ASGLevelScriptActorBase>(GetWorld()->GetLevelScriptActor());
+	SGCHECK(SGLevelScriptActor);
+	SGLevelScriptActor->OnQuestComplete.AddDynamic(this, &ASGPortal::Activate);
 }
 
 void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -46,4 +53,17 @@ void ASGPortal::SetLoadStageTimer(float LoadStageTimer)
 	GetWorld()->GetTimerManager().SetTimer(LoadStageTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		SGGameInstance->LoadNextStage();
 	}), LoadStageTimer, false);
+}
+
+void ASGPortal::Disable()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+}
+
+void ASGPortal::Activate()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+	ParticleSystem->Activate(true);
 }

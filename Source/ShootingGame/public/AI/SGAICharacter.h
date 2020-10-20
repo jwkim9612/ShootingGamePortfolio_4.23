@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "SGAICharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeadDelegate);
+
 UCLASS()
 class SHOOTINGGAME_API ASGAICharacter : public ACharacter
 {
@@ -29,6 +31,9 @@ private:
 
 	void DropItem();
 	void Dead();
+
+public:
+	FOnDeadDelegate OnDead;
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "ShootingGame.h"
 #include "Blueprint/UserWidget.h"
@@ -17,7 +17,9 @@ public:
 	
 public:
 	void PlayFadeAnimation();
-	void UpdateText();
+	void UpdateTitleAndObjetiveText();
+	void SetQuestText(FString& NewQuestString);
+	void UpdateQuestText();
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -35,4 +37,10 @@ private:
 private:
 	UPROPERTY()
 	class USGGameInstance* SGGameInstance;
+
+	UPROPERTY()
+	class ASGLevelScriptActorBase* SGLevelScriptActor;
+
+private:
+	FString QuestString;
 };

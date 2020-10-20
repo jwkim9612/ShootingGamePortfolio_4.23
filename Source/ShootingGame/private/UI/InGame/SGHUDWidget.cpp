@@ -43,9 +43,8 @@ void USGHUDWidget::PlayFadeHitEffectAnimation()
 
 void USGHUDWidget::PlayFadeObjectiveAnimation()
 {
-
 	SGCHECK(SGObjectiveHUD);
-	SGObjectiveHUD->UpdateText();
+	SGObjectiveHUD->UpdateTitleAndObjetiveText();
 	SGObjectiveHUD->PlayFadeAnimation();
 }
 
@@ -82,4 +81,9 @@ USGCrossHair * USGHUDWidget::GetSGCrossHair() const
 USGWeaponHUD * USGHUDWidget::GetWeaponHUD() const
 {
 	return SGWeaponHUD;
+}
+
+USGObjectiveHUD * USGHUDWidget::GetObjectiveHUD() const
+{
+	return SGObjectiveHUD;
 }
