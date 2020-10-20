@@ -13,7 +13,5 @@ void ASGBunker::BeginPlay()
 		++ObjectiveCount;
 	}
 
-	FString Quest = TEXT("처치한 적의 수");
-	SGObjectiveHUD->SetQuestText(Quest);
 	SGObjectiveHUD->UpdateQuestText();
 }

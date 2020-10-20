@@ -20,6 +20,8 @@ void ASGLevelScriptActorBase::BeginPlay()
 
 	SGObjectiveHUD = SGPlayerController->GetSGHUDWidget()->GetObjectiveHUD();
 	SGCHECK(SGObjectiveHUD);
+
+	SGObjectiveHUD->SetQuestText(Quest);
 }
 
 int32 ASGLevelScriptActorBase::GetObjectiveCount() const

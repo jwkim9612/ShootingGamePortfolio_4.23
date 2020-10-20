@@ -220,14 +220,10 @@ void ASGWeapon::InitializeAmmo()
 		case WeaponType::Rifle:
 			Ammo = SGSaveGame->RifleAmmo;
 			MaxAmmo = SGSaveGame->RifleMaxAmmo;
-			SGLOG(Warning, TEXT("Load Rifle Max Ammo = %d"), SGSaveGame->RifleMaxAmmo);
-			SGLOG(Warning, TEXT("Load Rifle Ammo = %d"), SGSaveGame->RifleAmmo);
 			break;
 		case WeaponType::Pistol:
 			Ammo = SGSaveGame->PistolAmmo;
 			MaxAmmo = SGSaveGame->PistolMaxAmmo;
-			SGLOG(Warning, TEXT("Load Pistol Max Ammo = %d"), SGSaveGame->PistolMaxAmmo);
-			SGLOG(Warning, TEXT("Load Pistol Ammo = %d"), SGSaveGame->PistolAmmo);
 			break;
 		}
 	}

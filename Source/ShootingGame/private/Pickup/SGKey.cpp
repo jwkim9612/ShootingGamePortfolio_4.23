@@ -4,12 +4,6 @@ ASGKey::ASGKey()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
-	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	
-	RootComponent = CapsuleComponent;
-	StaticMeshComponent->SetupAttachment(RootComponent);
-
 	StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -45.0f));
 	StaticMeshComponent->SetRelativeRotation(FRotator(0.0f, 0.0f, -90.0f));
 }
@@ -30,6 +24,6 @@ void ASGKey::Tick(float DeltaSeconds)
 
 void ASGKey::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	SGLOG(Warning, TEXT("Overlap"));
+	OnPickup.Broadcast();
 	Destroy();
 }

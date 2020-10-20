@@ -30,6 +30,9 @@ public:
 	FOnQuestCompleteDelegate OnQuestComplete;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Quest", meta = (AllowPrivateAccess = true))
+	FString Quest;
+
 	UPROPERTY()
 	class USGGameInstance* SGGameInstance;
 
