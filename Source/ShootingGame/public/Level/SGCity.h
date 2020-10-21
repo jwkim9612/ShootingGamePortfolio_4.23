@@ -12,4 +12,6 @@ class SHOOTINGGAME_API ASGCity : public ASGLevelScriptActorBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void BeginPlay() override;
 };

@@ -9,20 +9,13 @@ ASGWeapon::ASGWeapon()
 	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
 	FireAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("FireAudioComponent"));
 	ReloadAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("ReloadAudioComponent"));
-	AmmoPickupAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AmmoPickupAudioComponent"));
 
 	SetRootComponent(MeshComponent);
 	FireAudioComponent->SetupAttachment(RootComponent);
 	ReloadAudioComponent->SetupAttachment(RootComponent);
-	AmmoPickupAudioComponent->SetupAttachment(RootComponent);
 
 	FireAudioComponent->SetAutoActivate(false);
 	ReloadAudioComponent->SetAutoActivate(false);
-	AmmoPickupAudioComponent->SetAutoActivate(false);
-
-	FireAudioComponent->SetVolumeMultiplier(0.3f);
-	ReloadAudioComponent->SetVolumeMultiplier(0.3f);
-	AmmoPickupAudioComponent->SetVolumeMultiplier(0.3f);
 
 	ProjectilePool.Reserve(PoolService::ProjectileCount);
 
@@ -103,7 +96,6 @@ void ASGWeapon::UseAmmo()
 void ASGWeapon::AddMaxAmmo(int32 IncreaseValue)
 {
 	MaxAmmo += IncreaseValue;
-	PlayAmmoPickupSound();
 	OnAmmoChanged.Broadcast();
 }
 
@@ -172,12 +164,6 @@ void ASGWeapon::PlayReloadSound()
 	ReloadAudioComponent->Play();
 }
 
-void ASGWeapon::PlayAmmoPickupSound()
-{
-	SGCHECK(AmmoPickupAudioComponent);
-	AmmoPickupAudioComponent->Play();
-}
-
 void ASGWeapon::SetWeaponData(FSGWeaponData* NewWeaponData)
 {
 	MaxAmmo = NewWeaponData->MaxAmmo;
@@ -189,7 +175,6 @@ void ASGWeapon::SetWeaponData(FSGWeaponData* NewWeaponData)
 
 	FireAudioComponent->SetSound(NewWeaponData->FireAudio);
 	ReloadAudioComponent->SetSound(NewWeaponData->ReloadAudio);
-	AmmoPickupAudioComponent->SetSound(NewWeaponData->AmmoPickupAudio);
 	MuzzleFlashParticle = NewWeaponData->MuzzleFlashParticle;
 }
 

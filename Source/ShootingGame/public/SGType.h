@@ -85,9 +85,6 @@ public:
 	class USoundBase* ReloadAudio;
 
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* AmmoPickupAudio;
-
-	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* MuzzleFlashParticle;
 
 	UPROPERTY(EditDefaultsOnly)

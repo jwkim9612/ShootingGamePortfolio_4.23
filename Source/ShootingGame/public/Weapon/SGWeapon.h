@@ -57,9 +57,6 @@ private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
 	UAudioComponent* ReloadAudioComponent;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
-	UAudioComponent* AmmoPickupAudioComponent;
-
 	UPROPERTY(VisibleAnywhere, category = "bullet", meta = (AllowPrivateAccess = true))
 	TSubclassOf<class ASGProjectile> ProjectileClass;
 

@@ -7,26 +7,32 @@ ASGAmmo::ASGAmmo()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	RootComponent = StaticMesh;
+	StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -25.0f));
+	StaticMeshComponent->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+	StaticMeshComponent->SetCollisionProfileName(TEXT("Pickup"));
+	StaticMeshComponent->SetSimulatePhysics(true);
 
-	StaticMesh->SetCollisionProfileName(TEXT("Pickup"));
-	StaticMesh->OnComponentBeginOverlap.AddDynamic(this, &ASGAmmo::OnOverlapBegin);
-	StaticMesh->SetSimulatePhysics(true);
+	CapsuleComponent->SetCapsuleHalfHeight(30.0f);
+	CapsuleComponent->SetCapsuleRadius(30.0f);
 }
 
 void ASGAmmo::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ASGAmmo::OnOverlapBegin);
+
 	SetCount();
 }
 
 void ASGAmmo::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+
 	auto SGPlayer = Cast<ASGPlayer>(OtherActor);
 	if (SGPlayer != nullptr)
 	{
+		Super::OnOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
 		switch (Type)
 		{
 		case WeaponType::Pistol:

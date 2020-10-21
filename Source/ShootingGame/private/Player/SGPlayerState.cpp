@@ -66,9 +66,6 @@ void ASGPlayerState::SavePlayerData()
 	NewPlayerData->PistolMaxAmmo = SGPlayer->GetPistol()->GetMaxAmmo();
 	NewPlayerData->Stage = SGGameInstance->GetNextStage();
 
-	SGLOG(Warning, TEXT("Rifle Max Ammo = %d"), NewPlayerData->RifleMaxAmmo);
-	SGLOG(Warning, TEXT("Rifle Ammo = %d"), NewPlayerData->RifleAmmo);
-
 	if(!UGameplayStatics::SaveGameToSlot(NewPlayerData, TEXT("PlayerSaveData"), 0))
 	{
 		SGLOG(Warning, TEXT("Error Save!!"));

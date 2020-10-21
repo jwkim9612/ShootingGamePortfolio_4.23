@@ -5,7 +5,7 @@ ASGStar::ASGStar()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CapsuleComponent->SetCapsuleHalfHeight(90.0f);
-	CapsuleComponent->SetCapsuleRadius(50.0f);
+	CapsuleComponent->SetCapsuleRadius(90.0f);
 	StaticMeshComponent->SetRelativeLocation(FVector(0.0f, 0.0f, -60.0f));
 }
 
@@ -25,6 +25,8 @@ void ASGStar::Tick(float DeltaTime)
 
 void ASGStar::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	Super::OnOverlapBegin(OverlappedComp, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
 	OnPickup.Broadcast();
 	Destroy();
 }

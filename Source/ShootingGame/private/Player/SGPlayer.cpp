@@ -13,6 +13,9 @@
 #include "SGGameInstance.h"
 #include "SGWeaponHUD.h"
 
+#include "PhysicalMaterials/PhysicalMaterial.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 ASGPlayer::ASGPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -110,6 +113,46 @@ void ASGPlayer::Tick(float DeltaSeconds)
 			SGPlayerState->HealHP();
 		}
 	}
+
+	//FHitResult HitResult;
+	//FVector Start = GetMesh()->GetSocketLocation(TEXT("foot_r"));
+	//FVector End = Start + FVector(0.0f, 0.0f, -500.0f);
+	//FCollisionQueryParams CollisionParams;
+	//CollisionParams.AddIgnoredActor(this);
+	//
+	/////// PhysMaterial이 Null로 나와서 아래 UKismetSystemLibrary를 사용.
+	////if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_WorldStatic, CollisionParams))
+	////{
+	////	DrawDebugLine(GetWorld(), Start, End, FColor::Orange, false, 10.0f, ESceneDepthPriorityGroup::SDPG_World, 2.0f);
+	////	SGLOG(Warning, TEXT("%s"), *HitResult.Actor->GetName());
+	////	if (HitResult.PhysMaterial != nullptr)
+	////	{
+	////		SGLOG(Warning, TEXT("%s"), *HitResult.PhysMaterial->GetName());
+	////	}
+	////	else
+	////	{
+	////		SGLOG(Warning, TEXT("No PhysMaterial"));
+	////	}
+	////}
+
+	//TArray<AActor*> pIgnore;
+	//pIgnore.Add(this);
+	//EDrawDebugTrace::Type eDebug = EDrawDebugTrace::None;
+
+	//if (UKismetSystemLibrary::LineTraceSingle(GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_WorldStatic), true, pIgnore, eDebug, HitResult, true))
+	//{
+	//	DrawDebugLine(GetWorld(), Start, End, FColor::Orange, false, 10.0f, ESceneDepthPriorityGroup::SDPG_World, 2.0f);
+	//	SGLOG(Warning, TEXT("%s"), *HitResult.Actor->GetName());
+	//	if (HitResult.PhysMaterial != nullptr)
+	//	{
+	//		SGLOG(Warning, TEXT("%s"), *HitResult.PhysMaterial->GetName());
+	//	}
+	//	else
+	//	{
+	//		SGLOG(Warning, TEXT("No PhysMaterial"));
+	//	}
+	//}
+
 }
 
 void ASGPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

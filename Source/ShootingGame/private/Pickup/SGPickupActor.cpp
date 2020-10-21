@@ -1,4 +1,5 @@
 #include "SGPickupActor.h"
+#include "Sound/SoundCue.h"
 
 ASGPickupActor::ASGPickupActor()
 {
@@ -17,5 +18,5 @@ void ASGPickupActor::BeginPlay()
 
 void ASGPickupActor::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	UGameplayStatics::SpawnSoundAtLocation(this, PickupSound, GetActorLocation());
 }
-
