@@ -31,7 +31,7 @@ protected:
 	UStaticMeshComponent* StaticMeshComponent;
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
-	class USoundCue* PickupSound;
+	class USoundBase* PickupSound;
 
 public:
 	FOnPickupDelegate OnPickup;

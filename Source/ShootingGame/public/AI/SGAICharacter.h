@@ -29,7 +29,15 @@ private:
 	UFUNCTION()
 	void OnSeePlayer(APawn* Pawn);
 
+	UFUNCTION()
 	void DropItem();
+	
+	UFUNCTION()
+	void SetDeadCollision();
+
+	UFUNCTION()
+	void SetDestroyTimer();
+
 	void Dead();
 
 public:

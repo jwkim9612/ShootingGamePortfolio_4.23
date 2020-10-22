@@ -1,5 +1,5 @@
 #include "SGPickupActor.h"
-#include "Sound/SoundCue.h"
+#include "Sound/SoundBase.h"
 
 ASGPickupActor::ASGPickupActor()
 {

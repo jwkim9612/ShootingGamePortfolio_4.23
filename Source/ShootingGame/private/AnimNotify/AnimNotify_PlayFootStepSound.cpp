@@ -39,11 +39,22 @@ void UAnimNotify_PlayFootStepSound::Notify(USkeletalMeshComponent* MeshComp, UAn
 	TArray<AActor*> IgnoreActorList;
 	IgnoreActorList.Add(MeshComp->GetOwner());
 	EDrawDebugTrace::Type Debug = EDrawDebugTrace::None;
+	UWorld* World = MeshComp->GetWorld();
+	SGCHECK(World);
 
-	if (MeshComp->GetWorld() == nullptr)
-		return;
+	bool bResult = UKismetSystemLibrary::LineTraceSingle(
+		World, 
+		Start, 
+		End, 
+		UEngineTypes::ConvertToTraceType(ECC_Visibility), 
+		true, 
+		IgnoreActorList, 
+		Debug, 
+		HitResult, 
+		true
+	);
 
-	if (UKismetSystemLibrary::LineTraceSingle(MeshComp->GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, IgnoreActorList, Debug, HitResult, true))
+	if (bResult)
 	{
 		if (HitResult.GetActor() == nullptr) 
 			return;
