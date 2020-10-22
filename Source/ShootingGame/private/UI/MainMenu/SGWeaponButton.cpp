@@ -25,6 +25,7 @@ void USGWeaponButton::SetWeaponData(FSGWeaponData * WeaponData)
 	ClipSizeText->SetText(FText::FromString(FString::Printf(TEXT("ClipSize : %d"), WeaponData->ClipSize)));
 	FireRateText->SetText(FText::FromString(FString::Printf(TEXT("FireRate : %.2f"), WeaponData->FireRate)));
 	RecoliText->SetText(FText::FromString(FString::Printf(TEXT("Recoli : %.1f"), WeaponData->Recoli)));
+	FireSound = WeaponData->FireAudio;
 }
 
 void USGWeaponButton::SetWeaponType(WeaponType NewType)
@@ -54,4 +55,12 @@ void USGWeaponButton::OnClicked()
 		CurrentWidget->SetSelectedWeaponText(Name->GetText().ToString());
 		CurrentWidget->ShowSelectedWeaponText();
 	}
+
+	PlayFireSound();
+}
+
+void USGWeaponButton::PlayFireSound()
+{
+	SGCHECK(FireSound);
+	UGameplayStatics::PlaySound2D(GetWorld(), FireSound, 0.3f);
 }

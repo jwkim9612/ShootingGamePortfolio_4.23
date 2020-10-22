@@ -35,7 +35,7 @@ void UAnimNotify_PlayFootStepSound::Notify(USkeletalMeshComponent* MeshComp, UAn
 	//		SGLOG(Warning, TEXT("No PhysMaterial"));
 	//	}
 	//}
-
+	
 	TArray<AActor*> IgnoreActorList;
 	IgnoreActorList.Add(MeshComp->GetOwner());
 	EDrawDebugTrace::Type Debug = EDrawDebugTrace::None;
@@ -43,7 +43,7 @@ void UAnimNotify_PlayFootStepSound::Notify(USkeletalMeshComponent* MeshComp, UAn
 	if (MeshComp->GetWorld() == nullptr)
 		return;
 
-	if (UKismetSystemLibrary::LineTraceSingle(MeshComp->GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_WorldStatic), true, IgnoreActorList, Debug, HitResult, true))
+	if (UKismetSystemLibrary::LineTraceSingle(MeshComp->GetWorld(), Start, End, UEngineTypes::ConvertToTraceType(ECC_Visibility), true, IgnoreActorList, Debug, HitResult, true))
 	{
 		if (HitResult.GetActor() == nullptr) 
 			return;

@@ -45,4 +45,6 @@ private:
 
 private:
 	FTimerHandle LoadStageTimerHandle;
+
+	bool bIsPlayerEntered;
 };

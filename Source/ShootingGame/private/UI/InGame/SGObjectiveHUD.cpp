@@ -9,12 +9,25 @@ void USGObjectiveHUD::NativeConstruct()
 
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
 	SGLevelScriptActor = Cast<ASGLevelScriptActorBase>(GetWorld()->GetLevelScriptActor());
+	SGLevelScriptActor->OnQuestComplete.AddDynamic(this, &USGObjectiveHUD::PlayFadeOpenedPortalAnimation);
+	SGLevelScriptActor->OnQuestComplete.AddDynamic(this, &USGObjectiveHUD::SetQuestTextColorForComplete);
 }
 
 void USGObjectiveHUD::PlayFadeAnimation()
 {
 	SGCHECK(Fade);
 	PlayAnimation(Fade);
+}
+
+void USGObjectiveHUD::PlayFadeOpenedPortalAnimation()
+{
+	SGCHECK(FadeOpenedPortal);
+	PlayAnimation(FadeOpenedPortal);
+}
+
+void USGObjectiveHUD::SetQuestTextColorForComplete()
+{
+	QuestText->SetColorAndOpacity(FLinearColor::Yellow);
 }
 
 void USGObjectiveHUD::UpdateTitleAndObjetiveText()
@@ -38,9 +51,4 @@ void USGObjectiveHUD::UpdateQuestText()
 	int32 ObjectiveCount = SGLevelScriptActor->GetObjectiveCount();
 
 	QuestText->SetText(FText::FromString(FString::Printf(TEXT("● %s : %d / %d"), *QuestString, AttainmentCount, ObjectiveCount)));
-
-	if (AttainmentCount == ObjectiveCount)
-	{
-		QuestText->SetColorAndOpacity(FLinearColor::Yellow);
-	}
 }

@@ -22,6 +22,7 @@ public:
 private:
 	UFUNCTION()
 	void OnClicked();
+	void PlayFireSound();
 
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -47,6 +48,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* RecoliText;
+
+	UPROPERTY()
+	class USoundBase* FireSound;
 
 	WeaponType Type;
 };

@@ -17,6 +17,13 @@ public:
 	
 public:
 	void PlayFadeAnimation();
+	
+	UFUNCTION()
+	void PlayFadeOpenedPortalAnimation();
+	
+	UFUNCTION()
+	void SetQuestTextColorForComplete();
+
 	void UpdateTitleAndObjetiveText();
 	void SetQuestText(FString& NewQuestString);
 	void UpdateQuestText();
@@ -33,6 +40,9 @@ private:
 
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* Fade;
+
+	UPROPERTY(meta = (BindWidgetAnim))
+	class UWidgetAnimation* FadeOpenedPortal;
 
 private:
 	UPROPERTY()

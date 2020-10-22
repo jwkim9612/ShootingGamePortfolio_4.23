@@ -22,6 +22,8 @@ void ASGPortal::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	bIsPlayerEntered = false;
+
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ASGPortal::OnOverlapBegin);
 
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
@@ -38,6 +40,11 @@ void ASGPortal::BeginPlay()
 
 void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	if (bIsPlayerEntered)
+		return;
+
+	bIsPlayerEntered = true;
+
 	SGCHECK(SGHUDWidget);
 	float AnimationLength = SGHUDWidget->PlayFadeOutScreenAnimation();
 	
