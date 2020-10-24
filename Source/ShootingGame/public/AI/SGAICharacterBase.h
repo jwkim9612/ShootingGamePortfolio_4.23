@@ -4,6 +4,8 @@
 #include "GameFramework/Character.h"
 #include "SGAICharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeadDelegate);
+
 UCLASS()
 class SHOOTINGGAME_API ASGAICharacterBase : public ACharacter
 {
@@ -20,6 +22,9 @@ public:
 	void SetTarget(class ASGPlayer* NewTarget);
 	class ASGPlayer* GetTarget() const;
 	float GetHPRatio() const;
+
+public:
+	FOnDeadDelegate OnDead;
 
 private:
 	UPROPERTY()

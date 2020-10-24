@@ -16,8 +16,6 @@ ASGAICharacter::ASGAICharacter()
 
 	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
 	PawnSensing->SetPeripheralVisionAngle(AIService::PeripheralVisionAngle);
-
-	Health = 100.0f;
 }
 
 void ASGAICharacter::BeginPlay()
@@ -48,9 +46,9 @@ float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent,
 {
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	Health = FMath::Clamp(Health - static_cast<int>(Damage), 0, Health);
+	CurrentHealth = FMath::Clamp(CurrentHealth - static_cast<int>(Damage), 0, CurrentHealth);
 
-	if (Health <= 0)
+	if (CurrentHealth <= 0)
 	{
 		Dead();
 	}

@@ -1,13 +1,12 @@
 #pragma once
 
 #include "ShootingGame.h"
-#include "GameFramework/Character.h"
+#include "AI/SGAICharacterBase.h"
 #include "SGAICharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeadDelegate);
 
 UCLASS()
-class SHOOTINGGAME_API ASGAICharacter : public ACharacter
+class SHOOTINGGAME_API ASGAICharacter : public ASGAICharacterBase
 {
 	GENERATED_BODY()
 
@@ -40,9 +39,6 @@ private:
 
 	void Dead();
 
-public:
-	FOnDeadDelegate OnDead;
-
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
 	class UPawnSensingComponent* PawnSensing;
@@ -51,9 +47,6 @@ private:
 	class ASGAIController* SGAIController;
 
 private:
-	UPROPERTY(EditAnywhere, category = "Stat", meta = (AllowPrivateAccess = true))
-	int32 Health;
-
 	UPROPERTY(EditAnywhere, category = "DropAmmo", meta = (AllowPrivateAccess = true))
 	TSubclassOf<class ASGAmmo> DropAmmo;
 
