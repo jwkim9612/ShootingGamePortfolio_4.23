@@ -6,13 +6,15 @@
 
 ASGProjectile::ASGProjectile()
 {
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComponent"));
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
 	
-	MeshComponent->SetCollisionProfileName(TEXT("Projectile"));
-	SetRootComponent(MeshComponent);
-	ParticleSystemComponent->SetupAttachment(RootComponent);
+	BoxComponent->SetCollisionProfileName(TEXT("Projectile"));
+	SetRootComponent(BoxComponent);
+	MeshComponent->SetupAttachment(RootComponent);
+	ParticleSystemComponent->SetupAttachment(MeshComponent);
 
 	MovementComponent->InitialSpeed = ProjectileService::DefaultInitialSpeed;
 	MovementComponent->MaxSpeed = ProjectileService::DefaultMaxSpeed;
@@ -28,14 +30,14 @@ void ASGProjectile::BeginPlay()
 	SGGameInstance = Cast<USGGameInstance>(GetWorld()->GetGameInstance());
 	SGCHECK(SGGameInstance);
 
-	MeshComponent->OnComponentHit.AddDynamic(this, &ASGProjectile::OnHit);
+	BoxComponent->OnComponentHit.AddDynamic(this, &ASGProjectile::OnHit);
 }
 
 // 발사체의 속도를 발사 방향으로 초기화시키는 함수입니다.
 void ASGProjectile::FireInDirection(const FVector & ShootDirection)
 {
 	MovementComponent->Velocity = ShootDirection * MovementComponent->InitialSpeed;
-	MeshComponent->SetRelativeRotation(ShootDirection.Rotation());
+	BoxComponent->SetRelativeRotation(ShootDirection.Rotation());
 }
 
 void ASGProjectile::Disable()
@@ -53,7 +55,7 @@ void ASGProjectile::Activate()
 	MovementComponent->Activate(true);
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
-	SetDisableTimer(ProjectileService::DisableTimer);
+	//SetDisableTimer(ProjectileService::DisableTimer);
 }
 
 void ASGProjectile::SetController(AController * NewController)
@@ -66,6 +68,11 @@ void ASGProjectile::SetControllingPawn(APawn * NewPawn)
 {
 	SGCHECK(NewPawn);
 	ControllingPawn = NewPawn;
+}
+
+void ASGProjectile::SetInitialSpeed(float NewSpeed)
+{
+	MovementComponent->InitialSpeed = NewSpeed;
 }
 
 int32 ASGProjectile::GetDamage() const
@@ -88,14 +95,14 @@ void ASGProjectile::ClearDisableTimer()
 void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UParticleSystem* ParticleSystem;
-	ASGAICharacter* TargetActor = Cast<ASGAICharacter>(OtherActor);
-	if (TargetActor != nullptr)
+	ACharacter* TargetCharacter = Cast<ACharacter>(OtherActor);
+	if (TargetCharacter != nullptr)
 	{
-		if (TargetActor->IsDead())
-		{
-			SGLOG(Warning, TEXT("Return"));
-			return;
-		}
+		//if (TargetActor->IsDead())
+		//{
+		//	SGLOG(Warning, TEXT("Return"));
+		//	return;
+		//}
 
 		FDamageEvent DamageEvent;
 		float FinalDamage;
@@ -111,7 +118,7 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 			SGGameInstance->PlayFloatingDamageText(Damage, Hit.Location);
 		}
 
-		TargetActor->TakeDamage(FinalDamage, DamageEvent, Controller, ControllingPawn);
+		TargetCharacter->TakeDamage(FinalDamage, DamageEvent, Controller, ControllingPawn);
 		ParticleSystem = SGGameInstance->TryGetParticleSystem(FString("HitCharacter"));
 	}
 	else
@@ -122,6 +129,6 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	auto Particle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, Hit.Location);
 	Particle->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
 
-	ClearDisableTimer();
+	//ClearDisableTimer();
 	Disable();
 }

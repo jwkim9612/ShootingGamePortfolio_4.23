@@ -1,4 +1,9 @@
 #include "BTService_Detect.h"
+#include "SGBossAIController.h"
+#include "SGAICharacterBase.h"
+#include "SGPlayer.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "DrawDebugHelpers.h"
 
 UBTService_Detect::UBTService_Detect()
 {
@@ -9,23 +14,40 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * Nod
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	AActor* ControllingActor = OwnerComp.GetOwner();
-	SGCHECK(ControllingActor);
+	ASGAICharacterBase* ControllingAICharacter = Cast<ASGAICharacterBase>(OwnerComp.GetAIOwner()->GetPawn());
+	SGCHECK(ControllingAICharacter);
 
-	UWorld* World = ControllingActor->GetWorld();
+	UWorld* World = ControllingAICharacter->GetWorld();
 	SGCHECK(World);
 
+	FCollisionQueryParams CollisionQueryParam(NAME_None, false, ControllingAICharacter);
+	FVector Center = ControllingAICharacter->GetActorLocation();
 	TArray<FOverlapResult> OverlapResults;
 	bool bResult = World->OverlapMultiByChannel(
 		OverlapResults,
-		ControllingActor->GetActorLocation(),
+		Center,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel2,
-		FCollisionShape::MakeSphere(DetectRadius)
+		FCollisionShape::MakeSphere(DetectRadius),
+		CollisionQueryParam
 	);
+
+	//DrawDebugSphere(World, Center, DetectRadius, 50, FColor::Yellow, false, 10.0f);
 
 	if (bResult)
 	{
-		SGLOG(Warning, TEXT("True"));
+		for (const auto& OverlapResult : OverlapResults)
+		{
+			ASGPlayer* SGPlayer = Cast<ASGPlayer>(OverlapResult.GetActor());
+			ControllingAICharacter->SetTarget(SGPlayer);
+			if (SGPlayer != nullptr)
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(ASGBossAIController::TargetKey, SGPlayer);
+			}
+		}
+	}
+	else
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(ASGBossAIController::TargetKey, nullptr);
 	}
 }

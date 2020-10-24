@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ShootingGame.h"
+#include "ProjectileService.h"
 #include "GameFramework/Actor.h"
 #include "SGProjectile.generated.h"
 
@@ -23,6 +24,7 @@ public:
 
 	void SetController(AController* NewController);
 	void SetControllingPawn(APawn* NewPawn);
+	void SetInitialSpeed(float NewSpeed);
 
 	int32 GetDamage() const;
 
@@ -36,8 +38,11 @@ private:
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
-	UStaticMeshComponent* MeshComponent;
+	UBoxComponent* BoxComponent;
 
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
+	UStaticMeshComponent* MeshComponent;
+	
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
 	class UProjectileMovementComponent* MovementComponent;
 

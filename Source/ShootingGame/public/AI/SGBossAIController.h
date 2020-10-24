@@ -25,4 +25,6 @@ private:
 	UPROPERTY()
 	class UBehaviorTree* BehaviorTree;
 
+public:
+	static const FName TargetKey;
 };

@@ -7,7 +7,7 @@
 void UAnimNotify_PlayFootStepSound::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
 {
 	Super::Notify(MeshComp, Animation);
-
+	
 	SGCHECK(SoundListClass);
 	if (SoundList == nullptr)
 	{
