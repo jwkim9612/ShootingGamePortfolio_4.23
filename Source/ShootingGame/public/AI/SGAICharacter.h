@@ -26,22 +26,20 @@ public:
 
 private:
 	UFUNCTION()
-	void OnSeePlayer(APawn* Pawn);
-
-	UFUNCTION()
 	void DropItem();
-	
+
 	UFUNCTION()
 	void SetDeadCollision();
 
 	UFUNCTION()
 	void SetDestroyTimer();
 
+	void CreateWeapon();
 	void Dead();
 
 private:
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
-	class UPawnSensingComponent* PawnSensing;
+	UPROPERTY(VisibleAnywhere, Category = "AI", meta = (AllowPrivateAccess = true))
+	class UAIPerceptionStimuliSourceComponent* AIPerceptionStimuliSourceComponent;
 
 	UPROPERTY()
 	class ASGAIController* SGAIController;
@@ -50,8 +48,10 @@ private:
 	UPROPERTY(EditAnywhere, category = "DropAmmo", meta = (AllowPrivateAccess = true))
 	TSubclassOf<class ASGAmmo> DropAmmo;
 
+	UPROPERTY()
+	class ASGWeapon* SGWeapon;
+
 private:
 	FTimerHandle DeadTimerHandle;
-
 	bool bIsDead;
 };

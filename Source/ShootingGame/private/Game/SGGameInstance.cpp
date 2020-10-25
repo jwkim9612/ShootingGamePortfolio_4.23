@@ -38,6 +38,14 @@ FString USGGameInstance::GetSelectedPistolName() const
 	return SelectedPistolName;
 }
 
+FString USGGameInstance::GetRandomWeaponName() const
+{
+	int32 WeaponCount = WeaponNames.Num();
+	int32 RandomIndex = FMath::RandRange(0, WeaponCount -1);
+
+	return WeaponNames[RandomIndex];
+}
+
 void USGGameInstance::SetCurrentStage(int32 NewStage)
 {
 	if (NewStage > StageService::FinalStage)
@@ -85,6 +93,7 @@ void USGGameInstance::InitializeWeaponDataTable()
 
 	TArray<FName> Names = WeaponDataTable->GetRowNames();
 	WeaponTable.Reserve(Names.Num());
+	WeaponNames.Reserve(Names.Num());
 	for (const FName& Name : Names)
 	{
 		FSGWeaponData* Data = WeaponDataTable->FindRow<FSGWeaponData>(Name, TEXT(""));
@@ -93,6 +102,7 @@ void USGGameInstance::InitializeWeaponDataTable()
 			ASGWeapon* Weapon = Data->Class->GetDefaultObject<ASGWeapon>();
 			Weapon->SetWeaponData(Data);
 			WeaponTable.Emplace(Data->Name, *Data);
+			WeaponNames.Emplace(Data->Name);
 		}
 	}
 }
@@ -154,6 +164,11 @@ FSGWeaponData* USGGameInstance::TryGetWeaponData(FString Name)
 
 	SGLOG(Warning, TEXT("%s is no Data"), *Name);
 	return nullptr;
+}
+
+FSGWeaponData * USGGameInstance::GetRandomWeaponData()
+{
+	return TryGetWeaponData(GetRandomWeaponName());
 }
 
 UTexture2D* USGGameInstance::TryGetImage(FString Name)

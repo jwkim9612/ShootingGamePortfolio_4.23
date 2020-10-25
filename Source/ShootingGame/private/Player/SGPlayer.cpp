@@ -39,6 +39,8 @@ ASGPlayer::ASGPlayer()
 	bIsEquipping = false;
 	bIsFiring = false;
 	bIsPressedAimDownSight = false;
+
+	TeamId = FGenericTeamId(0);
 }
 
 void ASGPlayer::BeginPlay()
@@ -181,6 +183,11 @@ ASGWeapon * ASGPlayer::GetRifle() const
 ASGWeapon * ASGPlayer::GetPistol() const
 {
 	return Pistol;
+}
+
+FGenericTeamId ASGPlayer::GetGenericTeamId() const
+{
+	return TeamId;
 }
 
 void ASGPlayer::TakeHit()
@@ -467,11 +474,12 @@ void ASGPlayer::CreateWeapon()
 	FString RifleName = SGGameInstance->GetSelectedRifleName();
 	FString PistolName = SGGameInstance->GetSelectedPistolName();
 
-	auto RifleData = SGGameInstance->TryGetWeaponData(RifleName);
-	if (RifleData != nullptr)
+	FSGWeaponData* RifleData = SGGameInstance->TryGetWeaponData(RifleName);
+	SGCHECK(RifleData);
+
+	Rifle = GetWorld()->SpawnActor<ASGWeapon>(RifleData->Class, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (Rifle != nullptr)
 	{
-		Rifle = Cast<ASGWeapon>(GetWorld()->SpawnActor(RifleData->Class, &FVector::ZeroVector, &FRotator::ZeroRotator));
-		SGCHECK(Rifle);
 		Rifle->SetController(SGPlayerController);
 		Rifle->SetControllingPawn(this);
 		Rifle->InitializeAmmo();
@@ -479,11 +487,12 @@ void ASGPlayer::CreateWeapon()
 		Rifle->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("Weapon_Attach"));
 	}
 
-	auto PistolData = SGGameInstance->TryGetWeaponData(PistolName);
-	if (PistolData != nullptr)
+	FSGWeaponData* PistolData = SGGameInstance->TryGetWeaponData(PistolName);
+	SGCHECK(PistolData);
+
+	Pistol = GetWorld()->SpawnActor<ASGWeapon>(PistolData->Class, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (Pistol != nullptr)
 	{
-		Pistol = Cast<ASGWeapon>(GetWorld()->SpawnActor(PistolData->Class, &FVector::ZeroVector, &FRotator::ZeroRotator));
-		SGCHECK(Pistol);
 		Pistol->SetController(SGPlayerController);
 		Pistol->SetControllingPawn(this);
 		Pistol->InitializeAmmo();

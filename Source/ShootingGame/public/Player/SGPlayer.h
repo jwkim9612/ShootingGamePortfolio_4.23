@@ -2,12 +2,13 @@
 
 #include "ShootingGame.h"
 #include "GameFramework/Character.h"
+#include "GenericTeamAgentInterface.h"
 #include "SGPlayer.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
 
 UCLASS()
-class SHOOTINGGAME_API ASGPlayer : public ACharacter
+class SHOOTINGGAME_API ASGPlayer : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -22,6 +23,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Jump() override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual FGenericTeamId GetGenericTeamId() const override;
 
 public:
 	int32 GetHealth() const;
@@ -67,6 +69,9 @@ public:
 	FOnWeaponChangedDelegate OnWeaponChanged;
 
 private:
+	FGenericTeamId TeamId;
+
+private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera", meta = (AllowPrivateAccess = true))
 	UCameraComponent* Camera;
 
@@ -74,7 +79,6 @@ private:
 	USpringArmComponent* SpringArm;
 
 private:
-
 	UPROPERTY()
 	class ASGPlayerController* SGPlayerController;
 
@@ -98,6 +102,7 @@ private:
 
 	UPROPERTY()
 	class USGWeaponHUD* SGWeaponHUD;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	int32 Health;

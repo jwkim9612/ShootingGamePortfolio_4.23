@@ -22,6 +22,7 @@ public:
 	void SetSelectedPistolName(FString PistolName);
 	FString GetSelectedRifleName() const;
 	FString GetSelectedPistolName() const;
+	FString GetRandomWeaponName() const;
 
 	void SetCurrentStage(int32 NewStage);
 	int32 GetCurrentStage() const;
@@ -41,6 +42,7 @@ public:
 public:
 	class UParticleSystem* TryGetParticleSystem(FString Name);
 	struct FSGWeaponData* TryGetWeaponData(FString Name);
+	struct FSGWeaponData* GetRandomWeaponData();
 	class UTexture2D* TryGetImage(FString Name);
 	struct FSGStageData* TryGetStageData(int32 Id);
 
@@ -74,6 +76,8 @@ private:
 	TMap<FString, struct FSGWeaponData> WeaponTable;
 	TMap<int32, struct FSGStageData> StageTable;
 
+	UPROPERTY()
+	TArray<FString> WeaponNames;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "FloatingDamageText")

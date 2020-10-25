@@ -30,7 +30,6 @@ public:
 	bool IsFullAmmo() const;
 	void PlayFireSound();
 	void PlayReloadSound();
-	void PlayAmmoPickupSound();
 
 	void SetWeaponData(struct FSGWeaponData* NewWeaponData);
 	void SetVisibility(bool bNewVisibility);

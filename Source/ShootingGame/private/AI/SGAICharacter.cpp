@@ -1,9 +1,12 @@
 #include "SGAICharacter.h"
 #include "SGPlayer.h"
 #include "SGAIController.h"
+#include "SGGameInstance.h"
+#include "SGWeapon.h"
 #include "AIService.h"
 #include "SGAmmo.h"
-#include "Perception/PawnSensingComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
 
 ASGAICharacter::ASGAICharacter()
 {
@@ -14,8 +17,8 @@ ASGAICharacter::ASGAICharacter()
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	GetCharacterMovement()->MaxWalkSpeed = AIService::MaxWalkSpeed;
 
-	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
-	PawnSensing->SetPeripheralVisionAngle(AIService::PeripheralVisionAngle);
+	AIPerceptionStimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("AIPerceptionStimuliSourceComponent"));
+	AIPerceptionStimuliSourceComponent->RegisterForSense(UAISense_Sight::StaticClass());
 }
 
 void ASGAICharacter::BeginPlay()
@@ -29,11 +32,11 @@ void ASGAICharacter::BeginPlay()
 		return;
 	}
 
-	PawnSensing->OnSeePawn.AddDynamic(this, &ASGAICharacter::OnSeePlayer);
-
 	OnDead.AddDynamic(this, &ASGAICharacter::DropItem);
 	OnDead.AddDynamic(this, &ASGAICharacter::SetDeadCollision);
 	OnDead.AddDynamic(this, &ASGAICharacter::SetDestroyTimer);
+
+	CreateWeapon();
 }
 
 void ASGAICharacter::Tick(float DeltaTime)
@@ -66,15 +69,6 @@ bool ASGAICharacter::IsDead() const
 	return bIsDead;
 }
 
-void ASGAICharacter::OnSeePlayer(APawn * Pawn)
-{
-	ASGPlayer* Player = Cast<ASGPlayer>(Pawn);
-	if (Player != nullptr)
-	{
-		SGAIController->MoveToActor(Player, 50.0f);
-	}
-}
-
 void ASGAICharacter::DropItem()
 {
 	if (DropAmmo != nullptr)
@@ -95,6 +89,24 @@ void ASGAICharacter::SetDestroyTimer()
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		Destroy();
 	}), 2.0f, false);
+}
+
+void ASGAICharacter::CreateWeapon()
+{
+	USGGameInstance* SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
+	SGCHECK(SGGameInstance);
+
+	FSGWeaponData* WeaponData = SGGameInstance->GetRandomWeaponData();
+	SGCHECK(WeaponData);
+
+	SGWeapon = GetWorld()->SpawnActor<ASGWeapon>(WeaponData->Class, FVector::ZeroVector, FRotator::ZeroRotator);
+	if (SGWeapon != nullptr)
+	{
+		SGWeapon->SetController(SGAIController);
+		SGWeapon->SetControllingPawn(SGAIController->GetPawn());
+		SGWeapon->CreateProjectilePool();
+		SGWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("Weapon_Attach"));
+	}
 }
 
 void ASGAICharacter::Dead()
