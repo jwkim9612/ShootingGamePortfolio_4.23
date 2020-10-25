@@ -3,6 +3,7 @@
 #include "SGProjectile.h"
 #include "ProjectileService.h"
 #include "SGPlayer.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ASGBoss::ASGBoss()
 {
@@ -43,13 +44,15 @@ float ASGBoss::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AContr
 	return FinalDamage;
 }
 
-void ASGBoss::Fire(const FVector& ShootDirection)
+void ASGBoss::Fire(const FVector& TargetLocation)
 {
 	FVector MuzzleLocation = GetMesh()->GetSocketLocation("Muzzle");
+	FRotator FinalRotation = UKismetMathLibrary::FindLookAtRotation(MuzzleLocation, TargetLocation);
+	FVector LaunchDirection = FinalRotation.Vector();
 
 	ASGProjectile* CurrentProjectile = ProjectilePool[ProjectileIndex];
 	CurrentProjectile->SetActorLocation(MuzzleLocation);
-	CurrentProjectile->FireInDirection(ShootDirection);
+	CurrentProjectile->FireInDirection(LaunchDirection);
 	CurrentProjectile->Activate();
 
 	++ProjectileIndex;

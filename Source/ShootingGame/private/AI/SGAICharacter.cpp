@@ -59,6 +59,12 @@ float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent,
 	return FinalDamage;
 }
 
+void ASGAICharacter::Fire(const FVector & TargetLocation)
+{
+	SGCHECK(SGWeapon);
+	SGWeapon->Fire(TargetLocation);
+}
+
 void ASGAICharacter::SetDead(bool bDead)
 {
 	bIsDead = bDead;

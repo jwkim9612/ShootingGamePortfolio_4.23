@@ -19,8 +19,8 @@ protected:
 
 public:
 	virtual void Fire(const FVector& ShootDirection);
-	void SetTarget(class ASGPlayer* NewTarget);
-	class ASGPlayer* GetTarget() const;
+	void SetTarget(class AActor* NewTarget);
+	AActor* GetTarget() const;
 	float GetHPRatio() const;
 
 public:
@@ -28,7 +28,7 @@ public:
 
 private:
 	UPROPERTY()
-	class ASGPlayer* Target;
+	class AActor* Target;
 
 protected:
 	UPROPERTY(VisibleInstanceOnly, Category = "Stat", meta = (AllowPrivateAccess = true))

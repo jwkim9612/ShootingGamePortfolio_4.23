@@ -17,13 +17,13 @@ void ASGAICharacterBase::Fire(const FVector & ShootDirection)
 	SGLOG(Warning, TEXT("Fire"));
 }
 
-void ASGAICharacterBase::SetTarget(ASGPlayer * NewTarget)
+void ASGAICharacterBase::SetTarget(AActor * NewTarget)
 {
 	SGCHECK(NewTarget);
 	Target = NewTarget;
 }
 
-ASGPlayer * ASGAICharacterBase::GetTarget() const
+AActor * ASGAICharacterBase::GetTarget() const
 {
 	return Target;
 }

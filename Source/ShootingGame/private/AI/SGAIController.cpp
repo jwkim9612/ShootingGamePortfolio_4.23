@@ -56,4 +56,5 @@ void ASGAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimu
 {
 	bool bOnTarget = Stimulus.WasSuccessfullySensed();
 	Blackboard->SetValueAsBool(bDetectedKey, bOnTarget);
+	SGAICharacter->SetTarget(Actor);
 }

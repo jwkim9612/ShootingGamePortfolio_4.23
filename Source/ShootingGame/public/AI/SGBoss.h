@@ -20,7 +20,7 @@ public:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
-	virtual void Fire(const FVector& ShootDirection) override;
+	virtual void Fire(const FVector& TargetLocation) override;
 
 private:
 	void CreateProjectilePool();
