@@ -12,8 +12,6 @@ class SHOOTINGGAME_API USGPlayerAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 
-
-
 private:
 	virtual void NativeBeginPlay() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;

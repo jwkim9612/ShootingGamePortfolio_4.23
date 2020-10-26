@@ -23,7 +23,9 @@ public:
 
 public:
 	void SetDead(bool bDead);
+	void SetDropAmmoClass(WeaponType Type);
 	bool IsDead() const;
+	class USGAICharacterAnimInstance* GetAnimInstance() const;
 
 private:
 	UFUNCTION()
@@ -44,6 +46,9 @@ private:
 
 	UPROPERTY()
 	class ASGAIController* SGAIController;
+
+	UPROPERTY()
+	class USGAICharacterAnimInstance* SGAICharacterAnimInstance;
 
 private:
 	UPROPERTY(EditAnywhere, category = "DropAmmo", meta = (AllowPrivateAccess = true))

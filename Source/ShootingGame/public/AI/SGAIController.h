@@ -23,6 +23,10 @@ private:
 	UFUNCTION()
 	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
+public:
+	void SetTargetKey(AActor* Actor);
+	void SetDetectedKey(bool bDetected);
+
 private:
 	UPROPERTY()
 	class ASGAICharacter* SGAICharacter;
@@ -40,4 +44,5 @@ public:
 	static const FName bDetectedKey;
 	static const FName OriginLocationKey;
 	static const FName PatrolLocationKey;
+	static const FName TargetKey;
 };

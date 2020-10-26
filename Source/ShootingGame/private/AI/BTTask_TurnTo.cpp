@@ -5,6 +5,8 @@
 
 UBTTask_TurnTo::UBTTask_TurnTo()
 {
+	bNotifyTick = true;
+	bCreateNodeInstance = true;
 	NodeName = TEXT("TurnTo");
 }
 
@@ -12,29 +14,53 @@ EBTNodeResult::Type UBTTask_TurnTo::ExecuteTask(UBehaviorTreeComponent & OwnerCo
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	APawn* ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
+	ControllingPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (ControllingPawn == nullptr)
 		return EBTNodeResult::Failed;
 
-	UWorld* World = ControllingPawn->GetWorld();
+	World = ControllingPawn->GetWorld();
 	if (World == nullptr)
 		return EBTNodeResult::Failed;
 
-	APawn* Target = Cast<APawn>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(BlackboardKey.SelectedKeyName));
-	if (Target == nullptr)
-		return EBTNodeResult::Failed;
-	
-	float LookYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), Target->GetActorLocation()).Yaw;
+	return EBTNodeResult::InProgress;
+}
+
+void UBTTask_TurnTo::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 * NodeMemory, float DeltaSeconds)
+{
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+	TargetLocation = FVector::ZeroVector;
+	if (UObject* Object = OwnerComp.GetBlackboardComponent()->GetValueAsObject(BlackboardKey.SelectedKeyName))
+	{
+		APawn* Target = Cast<APawn>(Object);
+		if (Target != nullptr)
+		{
+			TargetLocation = Target->GetActorLocation();
+		}
+	}
+	else
+	{
+		TargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(BlackboardKey.SelectedKeyName);
+	}
+
+	float LookYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), TargetLocation).Yaw;
 	FRotator ControllingPawnRotator = ControllingPawn->GetActorRotation();
 	ControllingPawn->SetActorRelativeRotation(
 		FRotator(
 			ControllingPawnRotator.Pitch,
 			FMath::FInterpTo(
 				ControllingPawnRotator.Yaw,
-				LookYaw, World->GetDeltaSeconds(), 
+				LookYaw, World->GetDeltaSeconds(),
 				TurnSpeed),
 			ControllingPawnRotator.Roll)
 	);
 
-	return Result;
+	int32 Int_ControllingPawnYaw = static_cast<int32>(ControllingPawnRotator.Yaw);
+	int32 Int_LookYaw = static_cast<int32>(LookYaw);
+	int32 Int_Difference = FMath::Abs(Int_ControllingPawnYaw - Int_LookYaw);
+
+	if (Int_Difference <= 1)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }

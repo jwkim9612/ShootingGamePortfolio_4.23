@@ -2,6 +2,7 @@
 #include "SGPlayer.h"
 #include "SGAIController.h"
 #include "SGGameInstance.h"
+#include "SGAICharacterAnimInstance.h"
 #include "SGWeapon.h"
 #include "AIService.h"
 #include "SGAmmo.h"
@@ -32,6 +33,13 @@ void ASGAICharacter::BeginPlay()
 		return;
 	}
 
+	SGAICharacterAnimInstance = Cast<USGAICharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (SGAICharacterAnimInstance == nullptr)
+	{
+		SGLOG(Warning, TEXT("No AnimInstance!!"));
+		return;
+	}
+
 	OnDead.AddDynamic(this, &ASGAICharacter::DropItem);
 	OnDead.AddDynamic(this, &ASGAICharacter::SetDeadCollision);
 	OnDead.AddDynamic(this, &ASGAICharacter::SetDestroyTimer);
@@ -50,6 +58,10 @@ float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent,
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
 	CurrentHealth = FMath::Clamp(CurrentHealth - static_cast<int>(Damage), 0, CurrentHealth);
+
+	SGAIController->SetDetectedKey(true);
+	SGAIController->SetTargetKey(DamageCauser);
+	SetTarget(DamageCauser);
 
 	if (CurrentHealth <= 0)
 	{
@@ -70,9 +82,33 @@ void ASGAICharacter::SetDead(bool bDead)
 	bIsDead = bDead;
 }
 
+void ASGAICharacter::SetDropAmmoClass(WeaponType Type)
+{
+	UBlueprint* SGAmmoBP = nullptr;
+	switch (Type)
+	{
+	case WeaponType::Rifle:
+		SGAmmoBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("Blueprint'/Game/BluePrint/Pickup/BP_SGRifleAmmo.BP_SGRifleAmmo'")));
+		break;
+	case WeaponType::Pistol:
+		SGAmmoBP = Cast<UBlueprint>(StaticLoadObject(UBlueprint::StaticClass(), nullptr, TEXT("Blueprint'/Game/BluePrint/Pickup/BP_SGPistolAmmo.BP_SGPistolAmmo'")));
+		break;
+	}
+
+	if (SGAmmoBP != nullptr)
+	{
+		DropAmmo = SGAmmoBP->GeneratedClass;
+	}
+}
+
 bool ASGAICharacter::IsDead() const
 {
 	return bIsDead;
+}
+
+USGAICharacterAnimInstance * ASGAICharacter::GetAnimInstance() const
+{
+	return SGAICharacterAnimInstance;
 }
 
 void ASGAICharacter::DropItem()
@@ -88,11 +124,14 @@ void ASGAICharacter::SetDeadCollision()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
 	GetMesh()->SetSimulatePhysics(true);
+	SGAIController->UnPossess();
+	SGAIController->Destroy();
 }
 
 void ASGAICharacter::SetDestroyTimer()
 {
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+		SGWeapon->Destroy();
 		Destroy();
 	}), 2.0f, false);
 }
@@ -112,6 +151,7 @@ void ASGAICharacter::CreateWeapon()
 		SGWeapon->SetControllingPawn(SGAIController->GetPawn());
 		SGWeapon->CreateProjectilePool();
 		SGWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("Weapon_Attach"));
+		SetDropAmmoClass(SGWeapon->GetWeaponType());
 	}
 }
 

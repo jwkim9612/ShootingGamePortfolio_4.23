@@ -9,6 +9,7 @@
 const FName ASGAIController::bDetectedKey = TEXT("bDetected");
 const FName ASGAIController::OriginLocationKey = TEXT("OriginLocation");
 const FName ASGAIController::PatrolLocationKey = TEXT("PatrolLocation");
+const FName ASGAIController::TargetKey = TEXT("Target");
 
 ASGAIController::ASGAIController()
 {
@@ -26,8 +27,8 @@ ASGAIController::ASGAIController()
 	
 	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent")));
 	AISightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("AISightConfig"));
-	AISightConfig->SightRadius = 500.0f;
-	AISightConfig->LoseSightRadius = 500.0f;
+	AISightConfig->SightRadius = 2000.0f;
+	AISightConfig->LoseSightRadius = 2000.0f;
 	PerceptionComponent->ConfigureSense(*AISightConfig);
 
 	SetGenericTeamId(FGenericTeamId(1));
@@ -55,6 +56,17 @@ void ASGAIController::BeginPlay()
 void ASGAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	bool bOnTarget = Stimulus.WasSuccessfullySensed();
-	Blackboard->SetValueAsBool(bDetectedKey, bOnTarget);
+	SetDetectedKey(bOnTarget);
+	SetTargetKey(Actor);
 	SGAICharacter->SetTarget(Actor);
+}
+
+void ASGAIController::SetTargetKey(AActor * Actor)
+{
+	Blackboard->SetValueAsObject(TargetKey, Actor);
+}
+
+void ASGAIController::SetDetectedKey(bool bDetected)
+{
+	Blackboard->SetValueAsBool(bDetectedKey, bDetected);
 }

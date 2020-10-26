@@ -17,8 +17,17 @@ public:
 
 public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Node", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, Category = "Turn", meta = (AllowPrivateAccess = true))
 	float TurnSpeed;
+
+	UPROPERTY()
+	APawn* ControllingPawn;
+
+	UPROPERTY()
+	UWorld* World;
+
+	FVector TargetLocation;
 };
