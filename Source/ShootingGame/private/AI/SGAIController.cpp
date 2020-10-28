@@ -28,7 +28,7 @@ ASGAIController::ASGAIController()
 	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent")));
 	AISightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("AISightConfig"));
 	AISightConfig->SightRadius = 2000.0f;
-	AISightConfig->LoseSightRadius = 2000.0f;
+	AISightConfig->LoseSightRadius = 4000.0f;
 	PerceptionComponent->ConfigureSense(*AISightConfig);
 
 	SetGenericTeamId(FGenericTeamId(1));
@@ -59,6 +59,17 @@ void ASGAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimu
 	SetDetectedKey(bOnTarget);
 	SetTargetKey(Actor);
 	SGAICharacter->SetTarget(Actor);
+
+	if (bOnTarget)
+	{
+		//SetFocus(Actor);
+		SGLOG(Warning, TEXT("True OnTargetPerceptionUpdated"));
+	}
+	else
+	{
+		//SetFocus(nullptr);
+		SGLOG(Warning, TEXT("false OnTargetPerceptionUpdated"));
+	}
 }
 
 void ASGAIController::SetTargetKey(AActor * Actor)

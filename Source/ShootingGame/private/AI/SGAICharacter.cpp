@@ -126,12 +126,12 @@ void ASGAICharacter::SetDeadCollision()
 	GetMesh()->SetSimulatePhysics(true);
 	SGAIController->UnPossess();
 	SGAIController->Destroy();
+	SGWeapon->Destroy();
 }
 
 void ASGAICharacter::SetDestroyTimer()
 {
 	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-		SGWeapon->Destroy();
 		Destroy();
 	}), 2.0f, false);
 }
