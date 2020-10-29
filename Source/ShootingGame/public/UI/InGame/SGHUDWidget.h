@@ -25,6 +25,7 @@ public:
 	void PlayFadeInScreenAnimation();
 	float PlayFadeOutScreenAnimation();
 	float PlayFadeDiedAnimation();
+	float PlayFadeGameClearAnimation();
 
 	void SetControllingPawn(APawn* aPawn);
 
@@ -55,6 +56,9 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class USGDiedWidget* SGDiedWidget;
+
+	UPROPERTY(meta = (BindWidget))
+	class USGGameClearWidget* SGGameClearWidget;
 
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* FadeInHPBar;

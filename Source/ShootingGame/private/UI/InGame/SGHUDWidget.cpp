@@ -6,6 +6,7 @@
 #include "SGObjectiveHUD.h"
 #include "SGPlayer.h"
 #include "SGDiedWidget.h"
+#include "SGGameClearWidget.h"
 
 bool USGHUDWidget::Initialize()
 {
@@ -80,6 +81,18 @@ float USGHUDWidget::PlayFadeDiedAnimation()
 	SGBossHPBar->SetRenderOpacity(0.0f);
 
 	float AnimationLength = SGDiedWidget->PlayFadeAnimation();
+	return AnimationLength;
+}
+
+float USGHUDWidget::PlayFadeGameClearAnimation()
+{
+	SGCrossHair->SetRenderOpacity(0.0f);
+	SGWeaponHUD->SetRenderOpacity(0.0f);
+	SGObjectiveHUD->SetRenderOpacity(0.0f);
+	SGHPBar->SetRenderOpacity(0.0f);
+	SGBossHPBar->SetRenderOpacity(0.0f);
+
+	float AnimationLength = SGGameClearWidget->PlayFadeAnimation();
 	return AnimationLength;
 }
 

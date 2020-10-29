@@ -15,7 +15,7 @@ void ASGLevelScriptActorBase::BeginPlay()
 	SGCHECK(SGGameInstance);
 	SGGameInstance->CreateFloatingDamageTextPool();
 	
-	ASGPlayerController* SGPlayerController = Cast<ASGPlayerController>(SGGameInstance->GetPrimaryPlayerController());
+	SGPlayerController = Cast<ASGPlayerController>(SGGameInstance->GetPrimaryPlayerController());
 	SGCHECK(SGPlayerController);
 
 	SGObjectiveHUD = SGPlayerController->GetSGHUDWidget()->GetObjectiveHUD();

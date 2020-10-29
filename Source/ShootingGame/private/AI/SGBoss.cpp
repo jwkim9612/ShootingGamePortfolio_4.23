@@ -35,6 +35,10 @@ void ASGBoss::BeginPlay()
 	{
 		SGPlayerController->GetSGHUDWidget()->GetSGBossHPBar()->SetHPProgressBar(GetHPRatio());
 	}
+	
+	OnDead.AddDynamic(this, &ASGBoss::SetDead);
+	OnDead.AddDynamic(this, &ASGBoss::SetDeadCollision);
+
 	CreateProjectilePool();
 }
 
@@ -53,8 +57,7 @@ float ASGBoss::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AContr
 
 	if (CurrentHealth <= 0)
 	{
-		SetDead();
-		SetDeadCollision();
+		OnDead.Broadcast();
 		SGPlayerController->GetSGHUDWidget()->PlayFadeOutBossHPBarAnimation();
 	}
 

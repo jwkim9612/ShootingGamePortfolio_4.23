@@ -39,6 +39,9 @@ protected:
 	UPROPERTY()
 	class USGObjectiveHUD* SGObjectiveHUD;
 
+	UPROPERTY()
+	class ASGPlayerController* SGPlayerController;
+
 	int32 ObjectiveCount;
 	int32 AttainmentCount;
 };

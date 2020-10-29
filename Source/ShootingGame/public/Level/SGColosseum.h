@@ -17,6 +17,9 @@ public:
 
 private:
 	void SetFadeInBossHPBarAnimationTimer();
+	
+	UFUNCTION()
+	void PlayGameClearAnimation();
 
 	FTimerHandle FadeInBossHPBarTimerHandle;
 };

@@ -14,6 +14,7 @@ void ASGColosseum::BeginPlay()
 	for (const auto& Boss : TActorRange<ASGBoss>(GetWorld()))
 	{
 		Boss->OnDead.AddDynamic(this, &ASGColosseum::AddAttainmentCount);
+		Boss->OnDead.AddDynamic(this, &ASGColosseum::PlayGameClearAnimation);
 		++ObjectiveCount;
 	}
 
@@ -24,11 +25,22 @@ void ASGColosseum::BeginPlay()
 void ASGColosseum::SetFadeInBossHPBarAnimationTimer()
 {
 	float ObjectiveAnimationLength = SGObjectiveHUD->GetFadeAnimationLength();
-	ASGPlayerController* SGPlayerController = Cast<ASGPlayerController>(SGGameInstance->GetPrimaryPlayerController());
 	if (SGPlayerController != nullptr)
 	{
-		GetWorld()->GetTimerManager().SetTimer(FadeInBossHPBarTimerHandle, FTimerDelegate::CreateLambda([this, SGPlayerController]() -> void {
+		GetWorld()->GetTimerManager().SetTimer(FadeInBossHPBarTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 			SGPlayerController->GetSGHUDWidget()->PlayFadeInBossHPBarAnimation();
 		}), ObjectiveAnimationLength, false);
+	}
+}
+
+void ASGColosseum::PlayGameClearAnimation()
+{
+	SGLOG(Warning, TEXT("Clear Animation"));
+	float GameClearAnimationLength = SGPlayerController->GetSGHUDWidget()->PlayFadeGameClearAnimation();
+	if (SGPlayerController != nullptr)
+	{
+		GetWorld()->GetTimerManager().SetTimer(FadeInBossHPBarTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+			SGGameInstance->LoadMainMenu();
+		}), GameClearAnimationLength, false);
 	}
 }

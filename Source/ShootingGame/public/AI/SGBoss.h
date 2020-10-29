@@ -24,7 +24,11 @@ public:
 
 private:
 	void CreateProjectilePool();
+
+	UFUNCTION()
 	void SetDead();
+
+	UFUNCTION()
 	void SetDeadCollision();
 
 private:
