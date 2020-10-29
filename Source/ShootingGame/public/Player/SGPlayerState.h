@@ -5,7 +5,7 @@
 #include "SGPlayerState.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 
 /**
  * 

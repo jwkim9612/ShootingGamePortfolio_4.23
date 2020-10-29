@@ -17,8 +17,6 @@ void ASGPlayerState::InitPlayerData(ASGPlayer* Player)
 void ASGPlayerState::SetHPToDamage(int32 Damage)
 {
 	SetHP(FMath::Clamp(CurrentHP - Damage, 0, MaxHP));
-
-	SGLOG(Warning, TEXT("Current HP : %d"), CurrentHP);
 }
 
 void ASGPlayerState::SetHP(int32 NewHP)

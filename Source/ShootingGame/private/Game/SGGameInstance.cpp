@@ -215,3 +215,8 @@ void USGGameInstance::LoadStage()
 		UGameplayStatics::OpenLevel(this, FName(*Data->Name));
 	}), LoadingTImer, false);
 }
+
+void USGGameInstance::LoadMainMenu()
+{
+	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"));
+}

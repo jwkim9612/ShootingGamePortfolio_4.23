@@ -22,9 +22,6 @@ bool UBTDecorator_TargetOnFireAngle::CalculateRawConditionValue(UBehaviorTreeCom
 	float ControllingPawnYaw = ControllingPawn->GetActorRotation().Yaw;
 
 	int32 Angle = FMath::Abs(LookAtYaw - ControllingPawnYaw);
-	SGLOG(Warning, TEXT("LookYaw = %f"), LookAtYaw);
-	SGLOG(Warning, TEXT("ControllingPawnYaw = %f"), ControllingPawnYaw);
-	SGLOG(Warning, TEXT("Angle = %d"), Angle);
 	if (Angle > 90)
 		bResult = false;
 	else

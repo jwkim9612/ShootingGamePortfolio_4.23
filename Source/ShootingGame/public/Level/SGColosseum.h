@@ -14,4 +14,9 @@ class SHOOTINGGAME_API ASGColosseum : public ASGLevelScriptActorBase
 	
 public:
 	virtual void BeginPlay() override;
+
+private:
+	void SetFadeInBossHPBarAnimationTimer();
+
+	FTimerHandle FadeInBossHPBarTimerHandle;
 };

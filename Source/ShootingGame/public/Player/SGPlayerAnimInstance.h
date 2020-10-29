@@ -19,6 +19,7 @@ private:
 public:
 	float GetReloadLength();
 	float GetEquipLength();
+	void SetDead();
 
 	void SetEquippingWeapon(class ASGWeapon* Weapon);
 
@@ -56,6 +57,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = true))
 	bool bIsEquipping;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = true))
+	bool bIsDead;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stat", meta = (AllowPrivateAccess = true))
 	FRotator AimRotation;

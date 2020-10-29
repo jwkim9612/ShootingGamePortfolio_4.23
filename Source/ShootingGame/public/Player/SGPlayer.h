@@ -65,6 +65,9 @@ private:
 	void SelectRifle();
 	void SelectPistol();
 
+	UFUNCTION()
+	void SetDead();
+
 public:
 	FOnWeaponChangedDelegate OnWeaponChanged;
 
@@ -116,6 +119,7 @@ private:
 	bool bIsEquipping;
 	bool bIsAimDownSight;
 	bool bIsFiring;
+	bool bIsDead;
 
 	bool bIsPressedAimDownSight;
 	bool bIsPressedSprint;
@@ -128,6 +132,9 @@ private:
 
 	UPROPERTY(EditInstanceOnly, category = "camera", meta = (AllowPrivateAccess = true))
 	FVector ArmLocation;
+
+	UPROPERTY(EditInstanceOnly, category = "camera", meta = (AllowPrivateAccess = true))
+	FRotator ArmRotation;
 
 private:
 	FTimerHandle HealingTimerHandle;

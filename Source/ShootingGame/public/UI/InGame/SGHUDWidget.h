@@ -18,14 +18,18 @@ public:
 public:
 	void PlayFadeInHPBarAnimation();
 	void PlayFadeOutHPBarAnimation();
+	void PlayFadeInBossHPBarAnimation();
+	void PlayFadeOutBossHPBarAnimation();
 	void PlayFadeHitEffectAnimation();
 	void PlayFadeObjectiveAnimation();
 	void PlayFadeInScreenAnimation();
 	float PlayFadeOutScreenAnimation();
+	float PlayFadeDiedAnimation();
 
 	void SetControllingPawn(APawn* aPawn);
 
 	class USGHPBar* GetSGHPBar() const;
+	class USGHPBar* GetSGBossHPBar() const;
 	class USGCrossHair* GetSGCrossHair() const;
 	class USGWeaponHUD* GetWeaponHUD() const;
 	class USGObjectiveHUD* GetObjectiveHUD() const;
@@ -33,6 +37,9 @@ public:
 private:
 	UPROPERTY(meta = (BindWidget))
 	class USGHPBar* SGHPBar;
+
+	UPROPERTY(meta = (BindWidget))
+	class USGHPBar* SGBossHPBar;
 
 	UPROPERTY(meta = (BindWidget))
 	class USGCrossHair* SGCrossHair;
@@ -46,11 +53,20 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class USGObjectiveHUD* SGObjectiveHUD;
 
+	UPROPERTY(meta = (BindWidget))
+	class USGDiedWidget* SGDiedWidget;
+
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* FadeInHPBar;
 
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* FadeOutHPBar;
+
+	UPROPERTY(meta = (BindWidgetAnim))
+	class UWidgetAnimation* FadeInBossHPBar;
+
+	UPROPERTY(meta = (BindWidgetAnim))
+	class UWidgetAnimation* FadeOutBossHPBar;
 
 	UPROPERTY(meta = (BindWidgetAnim))
 	class UWidgetAnimation* FadeInScreen;

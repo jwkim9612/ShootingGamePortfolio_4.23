@@ -22,7 +22,7 @@ protected:
 private:
 	UFUNCTION()
 	void OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
-
+	
 public:
 	void SetTargetKey(AActor* Actor);
 	void SetDetectedKey(bool bDetected);

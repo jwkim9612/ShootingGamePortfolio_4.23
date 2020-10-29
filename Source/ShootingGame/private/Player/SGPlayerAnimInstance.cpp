@@ -8,6 +8,8 @@ void USGPlayerAnimInstance::NativeBeginPlay()
 
 	Player = Cast<ASGPlayer>(TryGetPawnOwner());
 	SGCHECK(Player);
+
+	bIsDead = false;
 }
 
 void USGPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -50,6 +52,11 @@ float USGPlayerAnimInstance::GetEquipLength()
 
 	float PlayLength = EquipMontage->GetPlayLength();
 	return PlayLength;
+}
+
+void USGPlayerAnimInstance::SetDead()
+{
+	bIsDead = true;
 }
 
 void USGPlayerAnimInstance::SetEquippingWeapon(ASGWeapon * Weapon)

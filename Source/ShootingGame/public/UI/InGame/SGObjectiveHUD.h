@@ -17,6 +17,7 @@ public:
 	
 public:
 	void PlayFadeAnimation();
+	float GetFadeAnimationLength();
 	
 	UFUNCTION()
 	void PlayFadeOpenedPortalAnimation();

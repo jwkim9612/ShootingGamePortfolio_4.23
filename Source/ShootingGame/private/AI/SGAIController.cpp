@@ -59,17 +59,6 @@ void ASGAIController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimu
 	SetDetectedKey(bOnTarget);
 	SetTargetKey(Actor);
 	SGAICharacter->SetTarget(Actor);
-
-	if (bOnTarget)
-	{
-		//SetFocus(Actor);
-		SGLOG(Warning, TEXT("True OnTargetPerceptionUpdated"));
-	}
-	else
-	{
-		//SetFocus(nullptr);
-		SGLOG(Warning, TEXT("false OnTargetPerceptionUpdated"));
-	}
 }
 
 void ASGAIController::SetTargetKey(AActor * Actor)

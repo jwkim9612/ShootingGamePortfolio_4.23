@@ -1,5 +1,6 @@
 #include "SGPortal.h"
 #include "SGPlayerController.h"
+#include "SGPlayer.h"
 #include "SGGameInstance.h"
 #include "SGPlayerState.h"
 #include "SGHUDWidget.h"
@@ -53,6 +54,12 @@ void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * Ot
 
 	SGPlayerState->SavePlayerData();
 	SetLoadStageTimer(AnimationLength);
+
+	ASGPlayer* SGPlayer = Cast<ASGPlayer>(SGPlayerController->GetPawn());
+	if (SGPlayer != nullptr)
+	{
+		SGPlayer->DisableInput(SGPlayerController);
+	}
 }
 
 void ASGPortal::SetLoadStageTimer(float LoadStageTimer)

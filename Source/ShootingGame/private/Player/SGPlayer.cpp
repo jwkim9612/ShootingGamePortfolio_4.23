@@ -38,6 +38,7 @@ ASGPlayer::ASGPlayer()
 	bIsAimDownSight = false;
 	bIsEquipping = false;
 	bIsFiring = false;
+	bIsDead = false;
 	bIsPressedAimDownSight = false;
 
 	TeamId = FGenericTeamId(0);
@@ -65,6 +66,7 @@ void ASGPlayer::BeginPlay()
 	SGLOG(Warning, TEXT("Begin Character"));
 
 	SGPlayerState->InitPlayerData(this);
+	SGPlayerState->OnHPIsZero.AddDynamic(this, &ASGPlayer::SetDead);
 
 	SetCamera(CameraMode::UnAiming);
 	SetCamera(CameraMode::Stand);
@@ -102,17 +104,25 @@ void ASGPlayer::Tick(float DeltaSeconds)
 
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaSeconds, ArmLengthSpeed);
 	SpringArm->SetRelativeLocation(FMath::VInterpTo(SpringArm->GetRelativeTransform().GetLocation(), ArmLocation, DeltaSeconds, ArmLengthSpeed));
-
-	if (bIsHealing)
+	if (bIsDead)
 	{
-		if (SGPlayerState->IsMaxHP())
+		GetCapsuleComponent()->SetRelativeLocation(GetMesh()->GetComponentLocation());
+		SpringArm->SetRelativeRotation(FMath::RInterpTo(SpringArm->GetRelativeTransform().GetRotation().Rotator(), ArmRotation, DeltaSeconds, ArmLengthSpeed));
+	}
+
+	if (!bIsDead)
+	{
+		if (bIsHealing)
 		{
-			SGPlayerController->GetSGHUDWidget()->PlayFadeOutHPBarAnimation();
-			bIsHealing = false;
-		}
-		else
-		{
-			SGPlayerState->HealHP();
+			if (SGPlayerState->IsMaxHP())
+			{
+				SGPlayerController->GetSGHUDWidget()->PlayFadeOutHPBarAnimation();
+				bIsHealing = false;
+			}
+			else
+			{
+				SGPlayerState->HealHP();
+			}
 		}
 	}
 }
@@ -155,12 +165,12 @@ void ASGPlayer::Jump()
 float ASGPlayer::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	
+	SetHealingTimer();
 
 	SGPlayerState->SetHPToDamage(FinalDamage);
 	SGPlayerController->GetSGHUDWidget()->PlayFadeHitEffectAnimation();
 	SGPlayerController->GetSGHUDWidget()->PlayFadeInHPBarAnimation();
-
-	SetHealingTimer();
 
 	return FinalDamage;
 }
@@ -223,13 +233,11 @@ bool ASGPlayer::IsEquipping() const
 
 void ASGPlayer::MoveUpDown(float AxisValue)
 {
-	//AddMovementInput(Camera->GetForwardVector(), AxisValue);
 	AddMovementInput(GetActorForwardVector(), AxisValue);
 }
 
 void ASGPlayer::MoveRightLeft(float AxisValue)
 {
-	//AddMovementInput(Camera->GetRightVector(), AxisValue);
 	AddMovementInput(GetActorRightVector(), AxisValue);
 }
 
@@ -414,6 +422,11 @@ void ASGPlayer::SetCamera(CameraMode NewCameraMode)
 	case CameraMode::Crouch:
 		ArmLocation = FVector(0.0f, 65.0f, 40.0f);
 		break;
+	case CameraMode::Dead:
+		ArmRotation = FRotator(-90.0f, 0.0f, 0.0f);
+		ArmLocation = FVector(90.0f, 0.0f, 90.0f);
+		ArmLengthTo = 500.0f;
+		break;
 	}
 }
 
@@ -571,4 +584,21 @@ void ASGPlayer::SelectPistol()
 	CurrentWeapon = Pistol;
 	SGWeaponHUD->SetCurrentWeapon(CurrentWeapon);
 	OnWeaponChanged.Broadcast();
+}
+
+void ASGPlayer::SetDead()
+{
+	bIsDead = true;
+	
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("NoCollision"));
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	GetMesh()->SetSimulatePhysics(true);
+	DisableInput(SGPlayerController);
+	SetCamera(CameraMode::Dead);
+	TeamId = FGenericTeamId(1);
+
+	float DiedAnimationLength = SGPlayerController->GetSGHUDWidget()->PlayFadeDiedAnimation();
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+		SGGameInstance->LoadMainMenu();
+	}), DiedAnimationLength, false);
 }

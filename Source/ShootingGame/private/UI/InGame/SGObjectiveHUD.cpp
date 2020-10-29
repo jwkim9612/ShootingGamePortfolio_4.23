@@ -19,6 +19,11 @@ void USGObjectiveHUD::PlayFadeAnimation()
 	PlayAnimation(Fade);
 }
 
+float USGObjectiveHUD::GetFadeAnimationLength()
+{
+	return Fade->GetEndTime();
+}
+
 void USGObjectiveHUD::PlayFadeOpenedPortalAnimation()
 {
 	SGCHECK(FadeOpenedPortal);

@@ -49,6 +49,7 @@ public:
 	void PlayFloatingDamageText(int32 Damage, FVector Location, bool bIsHitHead = false);
 	void LoadNextStage();
 	void LoadStage();
+	void LoadMainMenu();
 
 public:
 	FStreamableManager AssetLoader;

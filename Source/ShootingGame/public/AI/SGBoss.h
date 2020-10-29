@@ -24,6 +24,8 @@ public:
 
 private:
 	void CreateProjectilePool();
+	void SetDead();
+	void SetDeadCollision();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = true))
@@ -32,6 +34,14 @@ private:
 	UPROPERTY()
 	TArray<class ASGProjectile*> ProjectilePool;
 
+	UPROPERTY()
+	class USGBossAnimInstance* SGBossAnimInstance;
+
+	UPROPERTY()
+	class ASGBossAIController* SGBossAIController;
+
+	UPROPERTY()
+	class ASGPlayerController* SGPlayerController;
 
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = true))
 	int32 ProjectilePoolSize;

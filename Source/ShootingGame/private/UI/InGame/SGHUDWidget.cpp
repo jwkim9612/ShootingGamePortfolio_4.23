@@ -5,6 +5,7 @@
 #include "SGHitEffect.h"
 #include "SGObjectiveHUD.h"
 #include "SGPlayer.h"
+#include "SGDiedWidget.h"
 
 bool USGHUDWidget::Initialize()
 {
@@ -35,6 +36,16 @@ void USGHUDWidget::PlayFadeOutHPBarAnimation()
 	bIsOnShowHPBar = false;
 }
 
+void USGHUDWidget::PlayFadeInBossHPBarAnimation()
+{
+	PlayAnimation(FadeInBossHPBar);
+}
+
+void USGHUDWidget::PlayFadeOutBossHPBarAnimation()
+{
+	PlayAnimation(FadeOutBossHPBar);
+}
+
 void USGHUDWidget::PlayFadeHitEffectAnimation()
 {
 	SGCHECK(SGHitEffect);
@@ -60,6 +71,18 @@ float USGHUDWidget::PlayFadeOutScreenAnimation()
 	return FadeOutScreen->GetEndTime();
 }
 
+float USGHUDWidget::PlayFadeDiedAnimation()
+{
+	SGCrossHair->SetRenderOpacity(0.0f);
+	SGWeaponHUD->SetRenderOpacity(0.0f);
+	SGObjectiveHUD->SetRenderOpacity(0.0f);
+	SGHPBar->SetRenderOpacity(0.0f);
+	SGBossHPBar->SetRenderOpacity(0.0f);
+
+	float AnimationLength = SGDiedWidget->PlayFadeAnimation();
+	return AnimationLength;
+}
+
 void USGHUDWidget::SetControllingPawn(APawn * aPawn)
 {
 	SGPlayer = Cast<ASGPlayer>(aPawn);
@@ -71,6 +94,11 @@ void USGHUDWidget::SetControllingPawn(APawn * aPawn)
 USGHPBar* USGHUDWidget::GetSGHPBar() const
 {
 	return SGHPBar;
+}
+
+USGHPBar * USGHUDWidget::GetSGBossHPBar() const
+{
+	return SGBossHPBar;
 }
 
 USGCrossHair * USGHUDWidget::GetSGCrossHair() const

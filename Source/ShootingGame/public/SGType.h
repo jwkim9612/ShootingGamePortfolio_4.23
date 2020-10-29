@@ -21,7 +21,8 @@ enum class CameraMode : uint8
 	UnAiming,
 	Aiming,
 	Stand,
-	Crouch
+	Crouch,
+	Dead
 };
 
 UENUM(BlueprintType)
