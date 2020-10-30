@@ -30,44 +30,44 @@ public:
 	class ASGWeapon* GetCurrentWeapon() const;
 	class ASGWeapon* GetRifle() const;
 	class ASGWeapon* GetPistol() const;
-
-	void TakeHit();
+	FRotator GetSpringArmRotation() const;
 	bool IsCrouching() const;
 	bool IsSprint() const;
 	bool IsReloading() const;
 	bool IsAimDownSight() const;
 	bool IsEquipping() const;
 	bool IsDead() const;
+	bool IsMoving() const;
+	void SetCamera(CameraMode NewCameraMode);
 
 private:
 	void MoveUpDown(float AxisValue);
 	void MoveRightLeft(float AxisValue);
 	void Turn(float AxisValue);
 	void LookUp(float AxisValue);
+	void Sprint();
+	void SprintOff();
+	void DoCrouch();
 
-	void SetHealingTimer();
-
+private:
 	void Fire();
 	void FireOnCrossHair();
 	void UnFire();
 	void Recoil();
 	void Reload();
-	void DoCrouch();
 	void AimDownSight();
 	void AimDownSightOff();
-	void SetCamera(CameraMode NewCameraMode);
-	void Sprint();
-	void SprintOff();
-	// 후에 이름 바꿀것. // 조준선 확산 처리.
-	void SpreadCorssHairSetting();
-	bool IsMoving();
+	void SpreadCrossHair();
 
+private:
 	void CreateWeapon();
 	void SelectRifle();
 	void SelectPistol();
 
+private:
 	UFUNCTION()
 	void SetDead();
+	void SetHealingTimer();
 
 public:
 	FOnWeaponChangedDelegate OnWeaponChanged;
@@ -111,20 +111,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Stat")
 	int32 Health;
 
-	UPROPERTY(VisibleAnywhere, Category = "Stat")
-	bool bIsHealing;
-
-	bool bIsReloading;
-	bool bIsCrouching;
-	bool bIsSprint;
-	bool bIsEquipping;
-	bool bIsAimDownSight;
-	bool bIsFiring;
-	bool bIsDead;
-
-	bool bIsPressedAimDownSight;
-	bool bIsPressedSprint;
-
 	UPROPERTY(EditInstanceOnly, category = "camera", meta = (AllowPrivateAccess = true))
 	float ArmLengthTo;
 
@@ -136,6 +122,18 @@ private:
 
 	UPROPERTY(EditInstanceOnly, category = "camera", meta = (AllowPrivateAccess = true))
 	FRotator ArmRotation;
+
+private:
+	bool bIsHealing;
+	bool bIsReloading;
+	bool bIsCrouching;
+	bool bIsSprint;
+	bool bIsEquipping;
+	bool bIsAimDownSight;
+	bool bIsFiring;
+	bool bIsDead;
+	bool bIsPressedAimDownSight;
+	bool bIsPressedSprint;
 
 private:
 	FTimerHandle HealingTimerHandle;

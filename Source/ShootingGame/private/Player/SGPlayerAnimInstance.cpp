@@ -60,21 +60,8 @@ void USGPlayerAnimInstance::SetEquippingWeapon(ASGWeapon * Weapon)
 
 FRotator USGPlayerAnimInstance::GetForwardAimRotation()
 {
-	auto ControlRotation = Player->GetControlRotation();
-	SGLOG(Warning, TEXT("ControlRotation = %f"), ControlRotation.Pitch);
-	auto ControlPitch = ControlRotation.Pitch;
-	if (ControlPitch > 180)
-	{
-		ControlPitch = 360 - ControlPitch;
-	}
-	else
-	{
-		ControlPitch *= -1;
-	}
-
-	ControlPitch /= 3;
-
-	return FRotator(0.0f, 0.0f, ControlPitch);
+	float SpringArmPitch = Player->GetSpringArmRotation().Pitch;
+	return FRotator(0.0f, 0.0f, -SpringArmPitch * 0.3f);
 }
 
 void USGPlayerAnimInstance::AnimNotify_EquipWeapon()
