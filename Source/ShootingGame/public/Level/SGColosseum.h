@@ -21,5 +21,8 @@ private:
 	UFUNCTION()
 	void PlayGameClearAnimation();
 
+	UFUNCTION()
+	void DeleteSaveData();
+
 	FTimerHandle FadeInBossHPBarTimerHandle;
 };

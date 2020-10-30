@@ -18,7 +18,6 @@ protected:
 
 public:
 	void FireInDirection(const FVector & ShootDirection);
-
 	void Disable();
 	void Activate();
 
@@ -28,9 +27,9 @@ public:
 
 	int32 GetDamage() const;
 
-private:
-	void SetDisableTimer(float DisableTimer);
-	void ClearDisableTimer();
+//private:
+	//void SetDisableTimer(float DisableTimer);
+	//void ClearDisableTimer();
 
 private:
 	UFUNCTION()
@@ -63,5 +62,5 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	int32 Damage;
 
-	FTimerHandle DisableTimerHandle;
+	//FTimerHandle DisableTimerHandle;
 };

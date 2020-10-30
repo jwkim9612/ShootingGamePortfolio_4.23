@@ -9,11 +9,13 @@ void USGMainMenuWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	SGMainMenuPlayerController = Cast<ASGMainMenuPlayerController>(GetOwningPlayer());
+	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
 
 	NewGameButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnNewGameClicked);
 	ExitButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnExitClicked);
 	
-	if (HasSaveData())
+	SGSaveGame = SGGameInstance->GetSaveData();
+	if (SGSaveGame != nullptr)
 	{
 		ContinueButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnContinueClicked);
 		ContinueButton->SetVisibility(ESlateVisibility::Visible);
@@ -32,7 +34,6 @@ void USGMainMenuWidget::OnNewGameClicked()
 void USGMainMenuWidget::OnContinueClicked()
 {
 	SGCHECK(SGSaveGame);
-	USGGameInstance* SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
 	SGGameInstance->SetSelectedRifleName(SGSaveGame->RifleName);
 	SGGameInstance->SetSelectedPistolName(SGSaveGame->PistolName);
 	SGGameInstance->SetCurrentStage(SGSaveGame->Stage);
@@ -44,15 +45,4 @@ void USGMainMenuWidget::OnExitClicked()
 	SGLOG(Warning, TEXT("Quit"));
 	// 에디터까지 종료
 	//FGenericPlatformMisc::RequestExit(true);
-}
-
-bool USGMainMenuWidget::HasSaveData()
-{
-	SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
-	if(SGSaveGame != nullptr)
-	{
-		return true;
-	}
-
-	return false;
 }

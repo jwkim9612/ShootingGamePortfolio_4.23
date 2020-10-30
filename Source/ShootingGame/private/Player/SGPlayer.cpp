@@ -13,9 +13,6 @@
 #include "SGGameInstance.h"
 #include "SGWeaponHUD.h"
 
-#include "PhysicalMaterials/PhysicalMaterial.h"
-#include "Kismet/KismetSystemLibrary.h"
-
 ASGPlayer::ASGPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -229,6 +226,11 @@ bool ASGPlayer::IsAimDownSight() const
 bool ASGPlayer::IsEquipping() const
 {
 	return bIsEquipping;
+}
+
+bool ASGPlayer::IsDead() const
+{
+	return bIsDead;
 }
 
 void ASGPlayer::MoveUpDown(float AxisValue)

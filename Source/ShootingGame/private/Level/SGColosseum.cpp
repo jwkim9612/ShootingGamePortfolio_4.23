@@ -15,6 +15,7 @@ void ASGColosseum::BeginPlay()
 	{
 		Boss->OnDead.AddDynamic(this, &ASGColosseum::AddAttainmentCount);
 		Boss->OnDead.AddDynamic(this, &ASGColosseum::PlayGameClearAnimation);
+		Boss->OnDead.AddDynamic(this, &ASGColosseum::DeleteSaveData);
 		++ObjectiveCount;
 	}
 
@@ -35,12 +36,19 @@ void ASGColosseum::SetFadeInBossHPBarAnimationTimer()
 
 void ASGColosseum::PlayGameClearAnimation()
 {
-	SGLOG(Warning, TEXT("Clear Animation"));
 	float GameClearAnimationLength = SGPlayerController->GetSGHUDWidget()->PlayFadeGameClearAnimation();
 	if (SGPlayerController != nullptr)
 	{
 		GetWorld()->GetTimerManager().SetTimer(FadeInBossHPBarTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 			SGGameInstance->LoadMainMenu();
 		}), GameClearAnimationLength, false);
+	}
+}
+
+void ASGColosseum::DeleteSaveData()
+{
+	if (SGGameInstance != nullptr)
+	{
+		SGGameInstance->DeleteSaveData();
 	}
 }

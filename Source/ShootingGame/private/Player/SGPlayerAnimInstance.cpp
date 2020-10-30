@@ -8,8 +8,6 @@ void USGPlayerAnimInstance::NativeBeginPlay()
 
 	Player = Cast<ASGPlayer>(TryGetPawnOwner());
 	SGCHECK(Player);
-
-	bIsDead = false;
 }
 
 void USGPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -54,11 +52,6 @@ float USGPlayerAnimInstance::GetEquipLength()
 	return PlayLength;
 }
 
-void USGPlayerAnimInstance::SetDead()
-{
-	bIsDead = true;
-}
-
 void USGPlayerAnimInstance::SetEquippingWeapon(ASGWeapon * Weapon)
 {
 	SGCHECK(Weapon);
@@ -68,6 +61,7 @@ void USGPlayerAnimInstance::SetEquippingWeapon(ASGWeapon * Weapon)
 FRotator USGPlayerAnimInstance::GetForwardAimRotation()
 {
 	auto ControlRotation = Player->GetControlRotation();
+	SGLOG(Warning, TEXT("ControlRotation = %f"), ControlRotation.Pitch);
 	auto ControlPitch = ControlRotation.Pitch;
 	if (ControlPitch > 180)
 	{

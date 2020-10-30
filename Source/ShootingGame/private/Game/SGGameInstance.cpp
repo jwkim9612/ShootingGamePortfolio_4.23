@@ -2,6 +2,7 @@
 #include "SGLoadingScreen.h"
 #include "SGFloatingDamageTextPool.h"
 #include "StageService.h"
+#include "SGSaveGame.h"
 #include "SGWeapon.h"
 
 void USGGameInstance::Init()
@@ -69,6 +70,17 @@ int32 USGGameInstance::GetNextStage()
 void USGGameInstance::IncreaseStage()
 {
 	SetCurrentStage(FMath::Clamp(CurrentStage + 1, 1, StageService::FinalStage));
+}
+
+USGSaveGame * USGGameInstance::GetSaveData() const
+{
+	USGSaveGame* SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
+	return SGSaveGame;
+}
+
+void USGGameInstance::DeleteSaveData()
+{
+	UGameplayStatics::DeleteGameInSlot(TEXT("PlayerSaveData"), 0);
 }
 
 void USGGameInstance::InitializeParticleDataTable()

@@ -25,8 +25,6 @@ private:
 	UFUNCTION()
 	void OnExitClicked();
 
-	bool HasSaveData();
-
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* NewGameButton;
@@ -36,6 +34,9 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExitButton;
+
+	UPROPERTY()
+	class USGGameInstance* SGGameInstance;
 
 	UPROPERTY()
 	class ASGMainMenuPlayerController* SGMainMenuPlayerController;

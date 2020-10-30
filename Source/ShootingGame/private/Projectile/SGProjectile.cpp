@@ -55,7 +55,6 @@ void ASGProjectile::Activate()
 	MovementComponent->Activate(true);
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
-	//SetDisableTimer(ProjectileService::DisableTimer);
 }
 
 void ASGProjectile::SetController(AController * NewController)
@@ -80,17 +79,17 @@ int32 ASGProjectile::GetDamage() const
 	return Damage;
 }
 
-void ASGProjectile::SetDisableTimer(float DisableTimer)
-{
-	GetWorld()->GetTimerManager().SetTimer(DisableTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-		Disable();
-	}), DisableTimer, false);
-}
-
-void ASGProjectile::ClearDisableTimer()
-{
-	GetWorld()->GetTimerManager().ClearTimer(DisableTimerHandle);
-}
+//void ASGProjectile::SetDisableTimer(float DisableTimer)
+//{
+//	GetWorld()->GetTimerManager().SetTimer(DisableTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
+//		Disable();
+//	}), DisableTimer, false);
+//}
+//
+//void ASGProjectile::ClearDisableTimer()
+//{
+//	GetWorld()->GetTimerManager().ClearTimer(DisableTimerHandle);
+//}
 
 void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
@@ -98,12 +97,6 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	ACharacter* TargetCharacter = Cast<ACharacter>(OtherActor);
 	if (TargetCharacter != nullptr)
 	{
-		//if (TargetActor->IsDead())
-		//{
-		//	SGLOG(Warning, TEXT("Return"));
-		//	return;
-		//}
-
 		FDamageEvent DamageEvent;
 		float FinalDamage;
 
@@ -126,9 +119,7 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		ParticleSystem = SGGameInstance->TryGetParticleSystem(FString("HitWall"));
 	}
 
-	auto Particle = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, Hit.Location);
-	Particle->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ParticleSystem, Hit.Location);
 
-	//ClearDisableTimer();
 	Disable();
 }

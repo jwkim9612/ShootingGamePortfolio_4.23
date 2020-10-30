@@ -37,6 +37,7 @@ public:
 	bool IsReloading() const;
 	bool IsAimDownSight() const;
 	bool IsEquipping() const;
+	bool IsDead() const;
 
 private:
 	void MoveUpDown(float AxisValue);

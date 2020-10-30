@@ -29,6 +29,9 @@ public:
 	int32 GetNextStage();
 	void IncreaseStage();
 
+	class USGSaveGame* GetSaveData() const;
+	void DeleteSaveData();
+
 private:
 	void InitializeParticleDataTable();
 	void InitializeWeaponDataTable();

@@ -1,5 +1,6 @@
 #include "SGAIController.h"
 #include "SGAICharacter.h"
+#include "SGPlayer.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
@@ -49,6 +50,24 @@ void ASGAIController::BeginPlay()
 		{
 			Blackboard->SetValueAsVector(OriginLocationKey, SGAICharacter->GetActorLocation());
 			Blackboard->SetValueAsVector(PatrolLocationKey, SGAICharacter->GetActorLocation() + SGAICharacter->GetActorForwardVector() * 500.0f);
+		}
+	}
+}
+
+void ASGAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	bool bDetected = Blackboard->GetValueAsBool(bDetectedKey);
+	if (bDetected)
+	{
+		ASGPlayer* SGPlayer = Cast<ASGPlayer>(SGAICharacter->GetTarget());
+		if (SGPlayer != nullptr)
+		{
+			if (SGPlayer->IsDead())
+			{
+				SetDetectedKey(false);
+			}
 		}
 	}
 }
