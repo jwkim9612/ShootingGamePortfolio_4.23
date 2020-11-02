@@ -26,12 +26,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Fire", meta = (AllowPrivateAccess = true, UIMin = 1, ClampMin = 1))
 	int32 Count = 1;
 
-	int32 PlayCount;
+private:
 	bool bDone;
-	
-
+	int32 PlayCount;
 	FTimerHandle MontageTimerHandle;
-
-
-
 };

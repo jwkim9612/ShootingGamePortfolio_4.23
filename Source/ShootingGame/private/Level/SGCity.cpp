@@ -9,7 +9,7 @@ void ASGCity::BeginPlay()
 
 	for (const auto& Star : TActorRange<ASGStar>(GetWorld()))
 	{
-		Star->OnPickup.AddDynamic(this, &ASGCity::AddAttainmentCount);
+		Star->OnPickup.AddUFunction(this, TEXT("AddAttainmentCount"));
 		++ObjectiveCount;
 	}
 

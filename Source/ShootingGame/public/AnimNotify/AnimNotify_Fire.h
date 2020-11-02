@@ -18,6 +18,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = true))
 	int32 Count;
-
-
 };

@@ -39,7 +39,6 @@ private:
 	void InitializeStageDataTable();
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Damage")
 	void CreateFloatingDamageTextPool();
 
 public:

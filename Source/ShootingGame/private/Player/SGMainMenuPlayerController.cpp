@@ -33,8 +33,8 @@ void ASGMainMenuPlayerController::BeginPlay()
 
 	bShowMouseCursor = true;
 
-	FInputModeUIOnly Mode;
-	SetInputMode(Mode);
+	FInputModeUIOnly UIOnlyMode;
+	SetInputMode(UIOnlyMode);
 }
 
 void ASGMainMenuPlayerController::InitializeWidgets()
@@ -49,10 +49,6 @@ void ASGMainMenuPlayerController::InitializeWidgets()
 
 void ASGMainMenuPlayerController::ShowMainMenuWidget()
 {
-	// 이유 모를 InvocationList [CurFunctionIndex]! = InDelegate 오류 때문에 추가 // 
-	SGMainMenuWidget = CreateWidget<USGMainMenuWidget>(this, MainMenuWidgetClass);
-	//////////////////////////////////////////////////////////////////////////////
-
 	ShowWidget(SGMainMenuWidget);
 }
 

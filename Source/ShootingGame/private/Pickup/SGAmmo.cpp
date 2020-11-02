@@ -22,12 +22,11 @@ void ASGAmmo::BeginPlay()
 	
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ASGAmmo::OnOverlapBegin);
 
-	SetCount();
+	InitializeCount();
 }
 
 void ASGAmmo::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-
 	auto SGPlayer = Cast<ASGPlayer>(OtherActor);
 	if (SGPlayer != nullptr)
 	{
@@ -47,7 +46,7 @@ void ASGAmmo::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * Othe
 	}
 }
 
-void ASGAmmo::SetCount()
+void ASGAmmo::InitializeCount()
 {
 	if (Count == 0)
 	{

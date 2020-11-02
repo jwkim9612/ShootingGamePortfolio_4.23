@@ -17,24 +17,7 @@ void UAnimNotify_PlayFootStepSound::Notify(USkeletalMeshComponent* MeshComp, UAn
 
 	FHitResult HitResult;
 	FVector Start = MeshComp->GetSocketLocation(SocketName);
-	FVector End = Start + FVector(0.0f, 0.0f, -500.0f);
-	//FCollisionQueryParams CollisionParams;
-	//CollisionParams.AddIgnoredActor(this);
-
-	///// PhysMaterial이 Null로 나와서 아래 UKismetSystemLibrary를 사용.
-	//if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_WorldStatic, CollisionParams))
-	//{
-	//	DrawDebugLine(GetWorld(), Start, End, FColor::Orange, false, 10.0f, ESceneDepthPriorityGroup::SDPG_World, 2.0f);
-	//	SGLOG(Warning, TEXT("%s"), *HitResult.Actor->GetName());
-	//	if (HitResult.PhysMaterial != nullptr)
-	//	{
-	//		SGLOG(Warning, TEXT("%s"), *HitResult.PhysMaterial->GetName());
-	//	}
-	//	else
-	//	{
-	//		SGLOG(Warning, TEXT("No PhysMaterial"));
-	//	}
-	//}
+	FVector End = Start + FVector(0.0f, 0.0f, -100.0f);
 	
 	TArray<AActor*> IgnoreActorList;
 	IgnoreActorList.Add(MeshComp->GetOwner());

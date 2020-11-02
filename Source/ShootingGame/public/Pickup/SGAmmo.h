@@ -19,7 +19,8 @@ protected:
 private:
 	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
-	void SetCount();
+private:
+	void InitializeCount();
 
 private:
 	UPROPERTY(EditDefaultsOnly, category = "Ammo", meta = (AllowPrivateAccess = true))

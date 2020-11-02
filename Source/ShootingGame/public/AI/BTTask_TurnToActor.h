@@ -20,12 +20,20 @@ public:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 private:
+	void Turn();
+	bool IsDone();
+
+private:
 	float Get180DegreeTo360Degree(float ValueToConvert);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Turn", meta = (AllowPrivateAccess = true))
 	float TurnSpeed;
 
+private:
 	UPROPERTY()
 	APawn* ControllingPawn;
+
+	UPROPERTY()
+	AActor* Target;
 };

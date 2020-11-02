@@ -6,7 +6,7 @@ void UAnimNotify_Fire::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBas
 {
 	Super::Notify(MeshComp, Animation);
 
-	ASGAICharacterBase* ControllingAICharacter = Cast<ASGAICharacterBase>(MeshComp->GetOwner());
+	auto ControllingAICharacter = Cast<ASGAICharacterBase>(MeshComp->GetOwner());
 	SGCHECK(ControllingAICharacter);
 
 	AActor* Target = ControllingAICharacter->GetTarget();

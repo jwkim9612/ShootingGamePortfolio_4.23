@@ -22,13 +22,6 @@ ASGWeapon::ASGWeapon()
 	CurrentProjectileIndex = 0;
 }
 
-void ASGWeapon::BeginPlay()
-{
-	Super::BeginPlay();
-
-	//CreateProjectilePool();
-}
-
 void ASGWeapon::Fire(FVector TargetLocation)
 {
 	SGCHECK(ProjectileClass);
@@ -39,11 +32,10 @@ void ASGWeapon::Fire(FVector TargetLocation)
 		return;
 	}
 
-	MuzzleLocation = MeshComponent->GetSocketLocation(TEXT("Muzzle"));
-	MuzzleRotation = MeshComponent->GetSocketRotation(TEXT("Muzzle"));
+	FVector MuzzleLocation = GetMuzzleLocation();
+	FRotator MuzzleRotation = GetMuzzleRotation();
 
-	// 오브젝트 풀링 //
-	auto FinalRotation = UKismetMathLibrary::FindLookAtRotation(MuzzleLocation, TargetLocation);
+	FRotator FinalRotation = UKismetMathLibrary::FindLookAtRotation(MuzzleLocation, TargetLocation);
 	FVector LaunchDirection = FinalRotation.Vector();
 	if (CurrentProjectileIndex == 10)
 	{
@@ -59,15 +51,12 @@ void ASGWeapon::Fire(FVector TargetLocation)
 	UseAmmo();
 
 	++CurrentProjectileIndex;
-	//////////////////
 }
 
 void ASGWeapon::Reload()
 {
 	if (IsFullAmmo())
-	{
 		return;
-	}
 
 	int32 ReloadValues = ClipSize - Ammo;
 	if (ReloadValues > MaxAmmo)
@@ -102,25 +91,17 @@ void ASGWeapon::AddMaxAmmo(int32 IncreaseValue)
 bool ASGWeapon::HasAmmo() const
 {
 	if (Ammo > 0)
-	{
 		return true;
-	}
-	else
-	{
-		return false;
-	}
+	
+	return false;
 }
 
 bool ASGWeapon::HasMaxAmmo() const
 {
 	if (MaxAmmo > 0)
-	{
 		return true;
-	}
-	else
-	{
-		return false;
-	}
+	
+	return false;
 }
 
 float ASGWeapon::GetFireRate() const
@@ -136,6 +117,9 @@ float ASGWeapon::GetRecoli() const
 void ASGWeapon::PlayMuzzleFlash()
 {
 	SGCHECK(MuzzleFlashParticle);
+
+	FVector MuzzleLocation = GetMuzzleLocation();
+	FRotator MuzzleRotation = GetMuzzleRotation();
 	auto MuzzleFlash = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlashParticle, MuzzleLocation, MuzzleRotation);
 	MuzzleFlash->SetRelativeScale3D(FVector(0.5f, 0.5f, 0.5f));
 }
@@ -143,13 +127,9 @@ void ASGWeapon::PlayMuzzleFlash()
 bool ASGWeapon::IsFullAmmo() const
 {
 	if (Ammo == ClipSize)
-	{
 		return true;
-	}
-	else
-	{
-		return false;
-	}
+	
+	return false;
 }
 
 void ASGWeapon::PlayFireSound()
@@ -197,7 +177,7 @@ void ASGWeapon::SetControllingPawn(APawn * NewPawn)
 
 void ASGWeapon::InitializeAmmo()
 {
-	USGSaveGame* SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
+	auto SGSaveGame = Cast<USGSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerSaveData"), 0));
 	if (SGSaveGame != nullptr)
 	{
 		switch (Type)
@@ -229,6 +209,11 @@ FVector ASGWeapon::GetMuzzleLocation() const
 	return MeshComponent->GetSocketLocation(TEXT("Muzzle"));
 }
 
+FRotator ASGWeapon::GetMuzzleRotation() const
+{
+	return MeshComponent->GetSocketRotation(TEXT("Muzzle"));
+}
+
 WeaponType ASGWeapon::GetWeaponType() const
 {
 	return Type;
@@ -242,11 +227,9 @@ int32 ASGWeapon::GetDamage() const
 
 void ASGWeapon::CreateProjectilePool()
 {
-	MuzzleRotation = MeshComponent->GetSocketRotation(TEXT("Muzzle"));
-
 	for (int ProjectilePoolIndex = 0; ProjectilePoolIndex < 10; ProjectilePoolIndex++)
 	{
-		auto Projectile = Cast<ASGProjectile>(GetWorld()->SpawnActor(ProjectileClass, &FVector::ZeroVector, &MuzzleRotation));
+		auto Projectile = GetWorld()->SpawnActor<ASGProjectile>(ProjectileClass, FVector::ZeroVector, FRotator::ZeroRotator);
 		if (Projectile != nullptr)
 		{
 			Projectile->SetController(Controller);

@@ -5,7 +5,7 @@
 #include "SGPlayerState.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHPChangedDelegate);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
 
 /**
  * 
@@ -16,15 +16,18 @@ class SHOOTINGGAME_API ASGPlayerState : public APlayerState
 	GENERATED_BODY()
 	
 public:
+	ASGPlayerState();
+
+public:
 	void InitPlayerData(class ASGPlayer* Player);
+	void SavePlayerData();
 	void SetHPToDamage(int32 Damage);
 	void SetHP(int32 NewHP);
 	float GetHPRatio() const;
 	bool IsMaxHP() const;
 	void HealHP();
 
-	void SavePlayerData();
-
+public:
 	FOnHPChangedDelegate OnHPChanged;
 	FOnHPIsZeroDelegate OnHPIsZero;
 

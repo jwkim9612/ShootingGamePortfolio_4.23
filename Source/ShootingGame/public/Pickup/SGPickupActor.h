@@ -1,12 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "ShootingGame.h"
 #include "GameFramework/Actor.h"
 #include "SGPickupActor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickupDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnPickupDelegate);
 
 UCLASS()
 class SHOOTINGGAME_API ASGPickupActor : public AActor
@@ -15,9 +13,6 @@ class SHOOTINGGAME_API ASGPickupActor : public AActor
 	
 public:	
 	ASGPickupActor();
-
-protected:
-	virtual void BeginPlay() override;
 
 protected:
 	UFUNCTION()
@@ -35,5 +30,4 @@ protected:
 
 public:
 	FOnPickupDelegate OnPickup;
-
 };

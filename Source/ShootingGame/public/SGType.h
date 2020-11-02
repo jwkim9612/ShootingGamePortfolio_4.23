@@ -15,6 +15,7 @@ class SHOOTINGGAME_API USGType : public UObject
 	
 };
 
+UENUM()
 enum class CameraMode : uint8
 {
 	None,
@@ -25,7 +26,7 @@ enum class CameraMode : uint8
 	Dead
 };
 
-UENUM(BlueprintType)
+UENUM()
 enum class WeaponType : uint8
 {
 	None,

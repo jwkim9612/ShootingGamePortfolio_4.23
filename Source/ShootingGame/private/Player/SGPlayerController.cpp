@@ -13,10 +13,6 @@ ASGPlayerController::ASGPlayerController()
 	{
 		SGHUDWidgetClass = SGHUDWidget_Class.Class;
 	}
-	else
-	{
-		SGLOG(Warning, TEXT("HUDWidgetClass is null!!"));
-	}
 }
 
 void ASGPlayerController::OnPossess(APawn * aPawn)
@@ -48,20 +44,6 @@ void ASGPlayerController::BeginPlay()
 USGHUDWidget * ASGPlayerController::GetSGHUDWidget() const
 {
 	return SGHUDWidget;
-}
-
-void ASGPlayerController::SetDefaultSpreadCrossHair(float SpreadValue)
-{
-	auto CrossHair = SGHUDWidget->GetSGCrossHair();
-	SGCHECK(CrossHair);
-	CrossHair->SetDefaultSpreadValue(SpreadValue);
-}
-
-void ASGPlayerController::SetCurrentSpreadCrossHair(float SpreadValue)
-{
-	auto CrossHair = SGHUDWidget->GetSGCrossHair();
-	SGCHECK(CrossHair);
-	CrossHair->SetCurrentSpreadValue(SpreadValue);
 }
 
 void ASGPlayerController::BindWidgetToPlayerState()

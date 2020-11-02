@@ -9,7 +9,7 @@ void ASGCave::BeginPlay()
 
 	for (const auto& Key : TActorRange<ASGKey>(GetWorld()))
 	{
-		Key->OnPickup.AddDynamic(this, &ASGCave::AddAttainmentCount);
+		Key->OnPickup.AddUFunction(this, TEXT("AddAttainmentCount"));
 		++ObjectiveCount;
 	}
 	

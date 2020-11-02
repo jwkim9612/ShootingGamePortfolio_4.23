@@ -21,10 +21,9 @@ private:
 	void SetLoadStageTimer(float LoadStageTimer);
 
 public:
-	void Disable();
-
 	UFUNCTION()
 	void Activate();
+	void Disable();
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))

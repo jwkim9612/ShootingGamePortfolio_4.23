@@ -30,25 +30,23 @@ void USGPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 float USGPlayerAnimInstance::GetReloadLength()
 {
-	if(ReloadAnimMontage == nullptr)
-	{
-		SGLOG(Error, TEXT("ReloadAnimMontage is null!!"));
-		return 0.0f;
-	}
-
-	float PlayLength = ReloadAnimMontage->GetPlayLength();
-	return PlayLength;
+	return GetMontageLength(ReloadAnimMontage);
 }
 
 float USGPlayerAnimInstance::GetEquipLength()
 {
-	if (EquipMontage == nullptr)
+	return GetMontageLength(EquipMontage);
+}
+
+float USGPlayerAnimInstance::GetMontageLength(class UAnimMontage* AnimMontage)
+{
+	if (AnimMontage == nullptr)
 	{
-		SGLOG(Error, TEXT("EquipAnimMontage is null!!"));
+		SGLOG(Error, TEXT("AnimMontage is null!!"));
 		return 0.0f;
 	}
 
-	float PlayLength = EquipMontage->GetPlayLength();
+	float PlayLength = AnimMontage->GetPlayLength();
 	return PlayLength;
 }
 

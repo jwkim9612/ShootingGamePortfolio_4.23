@@ -18,6 +18,8 @@ EBTNodeResult::Type UBTTask_TurnToLocation::ExecuteTask(UBehaviorTreeComponent &
 	if (ControllingPawn == nullptr)
 		return EBTNodeResult::Failed;
 
+	TargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(BlackboardKey.SelectedKeyName);
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -25,9 +27,19 @@ void UBTTask_TurnToLocation::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	FVector TargetLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(BlackboardKey.SelectedKeyName);
+	Turn(DeltaSeconds);
+
+	if (IsDone())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+}
+
+void UBTTask_TurnToLocation::Turn(float DeltaSeconds)
+{
 	float LookAtYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), TargetLocation).Yaw;
 	FRotator ControllingPawnRotator = ControllingPawn->GetActorRotation();
+
 	ControllingPawn->SetActorRelativeRotation(
 		FRotator(
 			ControllingPawnRotator.Pitch,
@@ -37,15 +49,20 @@ void UBTTask_TurnToLocation::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 
 				TurnSpeed),
 			ControllingPawnRotator.Roll)
 	);
+}
+
+bool UBTTask_TurnToLocation::IsDone()
+{
+	float LookAtYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), TargetLocation).Yaw;
+	FRotator ControllingPawnRotator = ControllingPawn->GetActorRotation();
 
 	int32 Int_ControllingPawnYaw = static_cast<int32>(ControllingPawnRotator.Yaw);
 	int32 Int_LookYaw = static_cast<int32>(LookAtYaw);
 	int32 Int_Difference = FMath::Abs(Int_ControllingPawnYaw - Int_LookYaw);
 
-	if (Int_Difference <= 1)
-	{
-		ControllingPawn->SetActorRelativeRotation(FRotator(ControllingPawnRotator.Pitch, LookAtYaw, ControllingPawnRotator.Roll));
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}
+	if (Int_Difference == 0)
+		return true;
+
+	return false;
 }
 

@@ -20,10 +20,17 @@ public:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 private:
+	void Turn(float DeltaSeconds);
+	bool IsDone();
+
+private:
 	UPROPERTY(EditAnywhere, Category = "Turn", meta = (AllowPrivateAccess = true))
 	float TurnSpeed;
 
+private:
 	UPROPERTY()
 	APawn* ControllingPawn;
 
+	UPROPERTY()
+	FVector TargetLocation;
 };

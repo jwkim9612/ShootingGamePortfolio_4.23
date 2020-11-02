@@ -1,6 +1,7 @@
 #include "SGProjectile.h"
 #include "SGGameInstance.h"
 #include "SGAICharacter.h"
+#include "SGPlayer.h"
 #include "ProjectileService.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
@@ -18,8 +19,6 @@ ASGProjectile::ASGProjectile()
 
 	MovementComponent->InitialSpeed = ProjectileService::DefaultInitialSpeed;
 	MovementComponent->MaxSpeed = ProjectileService::DefaultMaxSpeed;
-
-	// ม฿ทย
 	MovementComponent->ProjectileGravityScale = ProjectileService::DefaultProjectileGravityScale;
 }
 
@@ -42,8 +41,6 @@ void ASGProjectile::FireInDirection(const FVector & ShootDirection)
 
 void ASGProjectile::Disable()
 {
-	MovementComponent->SetVelocityInLocalSpace(FVector::ZeroVector);
-	MovementComponent->ProjectileGravityScale = 0.0f;
 	MovementComponent->Deactivate();
 	SetActorHiddenInGame(true);
 	SetActorEnableCollision(false);
@@ -51,7 +48,6 @@ void ASGProjectile::Disable()
 
 void ASGProjectile::Activate()
 {
-	MovementComponent->ProjectileGravityScale = 0.05f;
 	MovementComponent->Activate(true);
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
@@ -79,18 +75,6 @@ int32 ASGProjectile::GetDamage() const
 	return Damage;
 }
 
-//void ASGProjectile::SetDisableTimer(float DisableTimer)
-//{
-//	GetWorld()->GetTimerManager().SetTimer(DisableTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-//		Disable();
-//	}), DisableTimer, false);
-//}
-//
-//void ASGProjectile::ClearDisableTimer()
-//{
-//	GetWorld()->GetTimerManager().ClearTimer(DisableTimerHandle);
-//}
-
 void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	UParticleSystem* ParticleSystem;
@@ -103,12 +87,14 @@ void ASGProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 		if (Hit.BoneName.ToString().Equals(TEXT("head")))
 		{
 			FinalDamage = Damage * 2;
-			SGGameInstance->PlayFloatingDamageText(Damage * 2.0f, Hit.Location, true);
+			if(!TargetCharacter->IsA(ASGPlayer::StaticClass()))
+				SGGameInstance->PlayFloatingDamageText(FinalDamage, Hit.Location, true);
 		}
 		else
 		{
 			FinalDamage = Damage;
-			SGGameInstance->PlayFloatingDamageText(Damage, Hit.Location);
+			if (!TargetCharacter->IsA(ASGPlayer::StaticClass()))
+				SGGameInstance->PlayFloatingDamageText(FinalDamage, Hit.Location);
 		}
 
 		TargetCharacter->TakeDamage(FinalDamage, DamageEvent, Controller, ControllingPawn);

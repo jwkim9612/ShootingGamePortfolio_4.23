@@ -5,7 +5,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "SGPlayer.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnWeaponChangedDelegate);
 
 UCLASS()
 class SHOOTINGGAME_API ASGPlayer : public ACharacter, public IGenericTeamAgentInterface
@@ -30,7 +30,7 @@ public:
 	class ASGWeapon* GetCurrentWeapon() const;
 	class ASGWeapon* GetRifle() const;
 	class ASGWeapon* GetPistol() const;
-	FRotator GetSpringArmRotation() const;
+	const FRotator GetSpringArmRotation() const;
 	bool IsCrouching() const;
 	bool IsSprint() const;
 	bool IsReloading() const;
@@ -63,6 +63,7 @@ private:
 	void CreateWeapon();
 	void SelectRifle();
 	void SelectPistol();
+	void SelectWeapon(class ASGWeapon* Weapon);
 
 private:
 	UFUNCTION()
@@ -106,6 +107,9 @@ private:
 
 	UPROPERTY()
 	class USGWeaponHUD* SGWeaponHUD;
+
+	UPROPERTY()
+	class USGCrossHair* SGCrossHair;
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Stat")

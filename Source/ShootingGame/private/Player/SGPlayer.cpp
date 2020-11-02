@@ -60,8 +60,11 @@ void ASGPlayer::BeginPlay()
 	SGWeaponHUD = Cast<USGWeaponHUD>(SGPlayerController->GetSGHUDWidget()->GetWeaponHUD());
 	SGCHECK(SGWeaponHUD);
 
+	SGCrossHair = Cast<USGCrossHair>(SGPlayerController->GetSGHUDWidget()->GetSGCrossHair());
+	SGCHECK(SGCrossHair);
+
 	SGPlayerState->InitPlayerData(this);
-	SGPlayerState->OnHPIsZero.AddDynamic(this, &ASGPlayer::SetDead);
+	SGPlayerState->OnHPIsZero.AddUFunction(this, TEXT("SetDead"));
 
 	SetCamera(CameraMode::UnAiming);
 	SetCamera(CameraMode::Stand);
@@ -79,7 +82,7 @@ void ASGPlayer::Tick(float DeltaSeconds)
 		if (!bIsAimDownSight && !bIsSprint && !GetCharacterMovement()->IsFalling() && !bIsReloading && !bIsEquipping)
 		{
 			bIsAimDownSight = true;
-			SGPlayerController->SetDefaultSpreadCrossHair(PlayerService::DefaultAimSpreadValue);
+			SGCrossHair->SetDefaultSpreadValue(PlayerService::DefaultAimSpreadValue);
 			SetCamera(CameraMode::Aiming);
 		}
 	}
@@ -195,7 +198,7 @@ ASGWeapon * ASGPlayer::GetPistol() const
 	return Pistol;
 }
 
-FRotator ASGPlayer::GetSpringArmRotation() const
+const FRotator ASGPlayer::GetSpringArmRotation() const
 {
 	return SpringArm->GetRelativeTransform().GetRotation().Rotator();
 }
@@ -396,7 +399,7 @@ void ASGPlayer::AimDownSightOff()
 {
 	bIsPressedAimDownSight = false;
 	bIsAimDownSight = false;
-	SGPlayerController->SetDefaultSpreadCrossHair(PlayerService::DefaultUnAimSpreadValue);
+	SGCrossHair->SetDefaultSpreadValue(PlayerService::DefaultUnAimSpreadValue);
 	SetCamera(CameraMode::UnAiming);
 }
 
@@ -446,22 +449,22 @@ void ASGPlayer::SpreadCrossHair()
 	{
 		if (IsMoving())
 		{
-			SGPlayerController->SetCurrentSpreadCrossHair(40.0f);
+			SGCrossHair->SetCurrentSpreadValue(40.0f);
 		}
 		else
 		{
-			SGPlayerController->SetCurrentSpreadCrossHair(20.0f);
+			SGCrossHair->SetCurrentSpreadValue(20.0f);
 		}
 	}
 	else
 	{
 		if (IsMoving())
 		{
-			SGPlayerController->SetCurrentSpreadCrossHair(80.0f);
+			SGCrossHair->SetCurrentSpreadValue(80.0f);
 		}
 		else
 		{
-			SGPlayerController->SetCurrentSpreadCrossHair(50.0f);
+			SGCrossHair->SetCurrentSpreadValue(50.0f);
 		}
 	}
 }
@@ -515,39 +518,18 @@ void ASGPlayer::CreateWeapon()
 
 void ASGPlayer::SelectRifle()
 {
-	if (CurrentWeapon == Rifle || bIsEquipping || bIsSprint || GetCharacterMovement()->IsFalling())// || )bIsAimDownSight)
-		return;
-
-	if (bIsReloading)
-	{
-		bIsReloading = false;
-		GetWorld()->GetTimerManager().ClearTimer(ReloadTimerHandle);
-	}
-
-	if (bIsFiring)
-	{
-		UnFire();
-	}
-
-	bIsAimDownSight = false;
-	bIsEquipping = true;
-	
-	auto EquipTimer = SGPlayerAnimInstance->GetEquipLength();
-	SGPlayerAnimInstance->SetEquippingWeapon(Rifle);
-	Pistol->SetVisibility(false);
-
-	GetWorld()->GetTimerManager().SetTimer(EquipTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
-		bIsEquipping = false;
-	}), EquipTimer, false);
-
-	CurrentWeapon = Rifle;
-	SGWeaponHUD->SetCurrentWeapon(CurrentWeapon);
-	OnWeaponChanged.Broadcast();
+	SelectWeapon(Rifle);
 }
 
 void ASGPlayer::SelectPistol()
 {
-	if (CurrentWeapon == Pistol || bIsEquipping || bIsSprint || GetCharacterMovement()->IsFalling())
+	SelectWeapon(Pistol);
+}
+
+void ASGPlayer::SelectWeapon(ASGWeapon * Weapon)
+{
+	SGCHECK(Weapon);
+	if (CurrentWeapon == Weapon || bIsEquipping || bIsSprint || GetCharacterMovement()->IsFalling())
 	{
 		return;
 	}
@@ -557,7 +539,7 @@ void ASGPlayer::SelectPistol()
 		bIsReloading = false;
 		GetWorld()->GetTimerManager().ClearTimer(ReloadTimerHandle);
 	}
-	
+
 	if (bIsFiring)
 	{
 		UnFire();
@@ -566,14 +548,14 @@ void ASGPlayer::SelectPistol()
 	bIsAimDownSight = false;
 	bIsEquipping = true;
 	auto EquipTimer = SGPlayerAnimInstance->GetEquipLength();
-	SGPlayerAnimInstance->SetEquippingWeapon(Pistol);
+	SGPlayerAnimInstance->SetEquippingWeapon(Weapon);
 	Rifle->SetVisibility(false);
 
 	GetWorld()->GetTimerManager().SetTimer(EquipTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		bIsEquipping = false;
 	}), EquipTimer, false);
 
-	CurrentWeapon = Pistol;
+	CurrentWeapon = Weapon;
 	SGWeaponHUD->SetCurrentWeapon(CurrentWeapon);
 	OnWeaponChanged.Broadcast();
 }

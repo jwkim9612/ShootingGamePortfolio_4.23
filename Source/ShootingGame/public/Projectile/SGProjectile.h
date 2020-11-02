@@ -24,12 +24,7 @@ public:
 	void SetController(AController* NewController);
 	void SetControllingPawn(APawn* NewPawn);
 	void SetInitialSpeed(float NewSpeed);
-
 	int32 GetDamage() const;
-
-//private:
-	//void SetDisableTimer(float DisableTimer);
-	//void ClearDisableTimer();
 
 private:
 	UFUNCTION()
@@ -62,5 +57,4 @@ private:
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	int32 Damage;
 
-	//FTimerHandle DisableTimerHandle;
 };

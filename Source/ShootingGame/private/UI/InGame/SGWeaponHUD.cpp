@@ -34,13 +34,13 @@ void USGWeaponHUD::BindPlayer(class ASGPlayer* NewPlayer)
 {
 	SGCHECK(NewPlayer);
 
-	NewPlayer->OnWeaponChanged.AddDynamic(this, &USGWeaponHUD::UpdateAmmo);
-	NewPlayer->OnWeaponChanged.AddDynamic(this, &USGWeaponHUD::UpdateWeapon);
+	NewPlayer->OnWeaponChanged.AddUFunction(this, TEXT("UpdateAmmo"));
+	NewPlayer->OnWeaponChanged.AddUFunction(this, TEXT("UpdateWeapon"));
 }
 
 void USGWeaponHUD::BindWeapon(ASGWeapon * NewWeapon)
 {
 	SGCHECK(NewWeapon);
 
-	NewWeapon->OnAmmoChanged.AddDynamic(this, &USGWeaponHUD::UpdateAmmo);
+	NewWeapon->OnAmmoChanged.AddUFunction(this, TEXT("UpdateAmmo"));
 }

@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "SGWeapon.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAmmoChangedDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnAmmoChangedDelegate);
 
 UCLASS()
 class SHOOTINGGAME_API ASGWeapon : public AActor
@@ -14,9 +14,6 @@ class SHOOTINGGAME_API ASGWeapon : public AActor
 public:	
 	ASGWeapon();
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
 	void Fire(FVector TargetLocation);
 	void Reload();
@@ -24,27 +21,26 @@ public:
 	void AddMaxAmmo(int32 IncreaseValue);
 	bool HasAmmo() const;
 	bool HasMaxAmmo() const;
-	float GetFireRate() const;
-	float GetRecoli() const;
-	void PlayMuzzleFlash();
 	bool IsFullAmmo() const;
+	void PlayMuzzleFlash();
 	void PlayFireSound();
 	void PlayReloadSound();
+	void InitializeAmmo();
+	void CreateProjectilePool();
 
+public:
 	void SetWeaponData(struct FSGWeaponData* NewWeaponData);
 	void SetVisibility(bool bNewVisibility);
 	void SetController(AController* NewController);
 	void SetControllingPawn(APawn* NewPawn);
-
-	void InitializeAmmo();
-
+	float GetFireRate() const;
+	float GetRecoli() const;
 	int32 GetAmmo() const;
 	int32 GetMaxAmmo() const;
 	FVector GetMuzzleLocation() const;
+	FRotator GetMuzzleRotation() const;
 	WeaponType GetWeaponType() const;
 	int32 GetDamage() const;
-
-	void CreateProjectilePool();
 
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = true))
@@ -88,15 +84,12 @@ private:
 	UPROPERTY()
 	TArray<class ASGProjectile*> ProjectilePool;
 
+private:
 	UPROPERTY()
 	class AController* Controller;
 
 	UPROPERTY()
 	class APawn* ControllingPawn;
-
-private:
-	FVector MuzzleLocation;
-	FRotator MuzzleRotation;
 
 public:
 	FOnAmmoChangedDelegate OnAmmoChanged;

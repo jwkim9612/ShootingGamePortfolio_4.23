@@ -4,6 +4,11 @@
 #include "SGWeapon.h"
 #include "SGGameInstance.h"
 
+ASGPlayerState::ASGPlayerState()
+{
+	PrimaryActorTick.bCanEverTick = false;
+}
+
 void ASGPlayerState::InitPlayerData(ASGPlayer* Player)
 {
 	SGCHECK(Player);

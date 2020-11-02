@@ -4,7 +4,7 @@
 #include "Engine/LevelScriptActor.h"
 #include "SGLevelScriptActorBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestCompleteDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnQuestCompleteDelegate);
 
 /**
  * 
@@ -31,8 +31,9 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Quest", meta = (AllowPrivateAccess = true))
-	FString Quest;
+	FString QuestText;
 
+protected:
 	UPROPERTY()
 	class USGGameInstance* SGGameInstance;
 
@@ -42,6 +43,7 @@ protected:
 	UPROPERTY()
 	class ASGPlayerController* SGPlayerController;
 
+protected:
 	int32 ObjectiveCount;
 	int32 AttainmentCount;
 };

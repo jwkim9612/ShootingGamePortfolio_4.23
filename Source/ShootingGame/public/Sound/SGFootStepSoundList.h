@@ -7,7 +7,7 @@
 /**
  * 
  */
-UCLASS(Blueprintable)
+UCLASS()
 class SHOOTINGGAME_API USGFootStepSoundList : public UObject
 {
 	GENERATED_BODY()

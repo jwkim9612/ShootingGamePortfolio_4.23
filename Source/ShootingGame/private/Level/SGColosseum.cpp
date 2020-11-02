@@ -47,8 +47,6 @@ void ASGColosseum::PlayGameClearAnimation()
 
 void ASGColosseum::DeleteSaveData()
 {
-	if (SGGameInstance != nullptr)
-	{
-		SGGameInstance->DeleteSaveData();
-	}
+	SGCHECK(SGGameInstance);
+	SGGameInstance->DeleteSaveData();
 }

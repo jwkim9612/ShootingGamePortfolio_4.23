@@ -22,9 +22,6 @@ public:
 public:
 	class USGHUDWidget* GetSGHUDWidget() const;
 
-	void SetDefaultSpreadCrossHair(float SpreadValue);
-	void SetCurrentSpreadCrossHair(float SpreadValue);
-
 private:
 	void BindWidgetToPlayerState();
 
@@ -37,6 +34,4 @@ private:
 
 	UPROPERTY()
 	class ASGPlayerState* SGPlayerState;
-
-
 };

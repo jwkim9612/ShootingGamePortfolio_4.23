@@ -19,6 +19,7 @@ private:
 public:
 	float GetReloadLength();
 	float GetEquipLength();
+	float GetMontageLength(class UAnimMontage* AnimMontage);
 	void SetEquippingWeapon(class ASGWeapon* Weapon);
 
 private:

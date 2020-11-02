@@ -18,6 +18,10 @@ EBTNodeResult::Type UBTTask_TurnToActor::ExecuteTask(UBehaviorTreeComponent & Ow
 	if (ControllingPawn == nullptr)
 		return EBTNodeResult::Failed;
 
+	Target = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(BlackboardKey.SelectedKeyName));
+	if (Target == nullptr)
+		return EBTNodeResult::Failed;
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -25,16 +29,26 @@ void UBTTask_TurnToActor::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 * N
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	AActor* Target = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(BlackboardKey.SelectedKeyName));
-	if (Target == nullptr)
-		return;
-
-	FVector TargetLocation = Target->GetActorLocation();
-	float LookAtYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawn->GetActorLocation(), TargetLocation).Yaw;
-	FRotator ControllingPawnRotator = ControllingPawn->GetActorRotation();
+	Turn();
 	
+	if (IsDone())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+}
+
+void UBTTask_TurnToActor::Turn()
+{
+	SGCHECK(Target);
+
+	FVector ControllingPawnLocation = ControllingPawn->GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
+
+	float LookAtYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawnLocation, TargetLocation).Yaw;
+	float ControllingPawnYaw = ControllingPawn->GetActorRotation().Yaw;
+
 	float LookAtYawConverted360 = Get180DegreeTo360Degree(LookAtYaw);
-	float PawnYawConverted360 = Get180DegreeTo360Degree(ControllingPawnRotator.Yaw);
+	float PawnYawConverted360 = Get180DegreeTo360Degree(ControllingPawnYaw);
 
 	float ResultValue = PawnYawConverted360 - LookAtYawConverted360;
 	if (ResultValue > 0.0f)
@@ -48,7 +62,7 @@ void UBTTask_TurnToActor::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 * N
 			ControllingPawn->AddActorWorldRotation(FRotator(0.0f, -2.0f, 0.0f));
 		}
 	}
-	else if(ResultValue < 0.0f)
+	else if (ResultValue < 0.0f)
 	{
 		if (ResultValue <= -180.0f)
 		{
@@ -59,16 +73,24 @@ void UBTTask_TurnToActor::TickTask(UBehaviorTreeComponent & OwnerComp, uint8 * N
 			ControllingPawn->AddActorWorldRotation(FRotator(0.0f, 2.0f, 0.0f));
 		}
 	}
+}
 
-	int32 Int_ControllingPawnYaw = static_cast<int32>(ControllingPawnRotator.Yaw);
+bool UBTTask_TurnToActor::IsDone()
+{
+	FVector ControllingPawnLocation = ControllingPawn->GetActorLocation();
+	FVector TargetLocation = Target->GetActorLocation();
+
+	float LookAtYaw = UKismetMathLibrary::FindLookAtRotation(ControllingPawnLocation, TargetLocation).Yaw;
+	float ControllingPawnYaw = ControllingPawn->GetActorRotation().Yaw;
+
+	int32 Int_ControllingPawnYaw = static_cast<int32>(ControllingPawnYaw);
 	int32 Int_LookYaw = static_cast<int32>(LookAtYaw);
 	int32 Int_Difference = FMath::Abs(Int_ControllingPawnYaw) - FMath::Abs(Int_LookYaw);
 
 	if (Int_Difference == 0)
-	{
-		ControllingPawn->SetActorRelativeRotation(FRotator(ControllingPawnRotator.Pitch, LookAtYaw, ControllingPawnRotator.Roll));
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-	}
+		return true;
+	
+	return false;
 }
 
 float UBTTask_TurnToActor::Get180DegreeTo360Degree(float ValueToConvert)

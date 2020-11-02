@@ -28,15 +28,18 @@ void ASGPortal::BeginPlay()
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ASGPortal::OnOverlapBegin);
 
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
+	SGCHECK(SGGameInstance);
+	
 	SGPlayerController = Cast<ASGPlayerController>(GetWorld()->GetFirstPlayerController());
-	if (SGPlayerController != nullptr)
-	{
-		SGHUDWidget = SGPlayerController->GetSGHUDWidget();
-	}
+	SGCHECK(SGPlayerController);
+	
+	SGHUDWidget = SGPlayerController->GetSGHUDWidget();
+	SGCHECK(SGHUDWidget);
 
-	ASGLevelScriptActorBase* SGLevelScriptActor = Cast<ASGLevelScriptActorBase>(GetWorld()->GetLevelScriptActor());
+	auto SGLevelScriptActor = Cast<ASGLevelScriptActorBase>(GetWorld()->GetLevelScriptActor());
 	SGCHECK(SGLevelScriptActor);
-	SGLevelScriptActor->OnQuestComplete.AddDynamic(this, &ASGPortal::Activate);
+
+	SGLevelScriptActor->OnQuestComplete.AddUFunction(this, TEXT("Activate"));
 }
 
 void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
