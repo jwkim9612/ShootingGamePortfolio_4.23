@@ -37,6 +37,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UVerticalBox* Right;
 
+private:
 	float DefaultSpreadValue;
 	float CurrentSpreadValue;
 };

@@ -8,7 +8,11 @@ void USGObjectiveHUD::NativeConstruct()
 	Super::NativeConstruct();
 
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
+	SGCHECK(SGGameInstance);
+
 	SGLevelScriptActor = Cast<ASGLevelScriptActorBase>(GetWorld()->GetLevelScriptActor());
+	SGCHECK(SGLevelScriptActor);
+
 	SGLevelScriptActor->OnQuestComplete.AddUFunction(this, TEXT("PlayFadeOpenedPortalAnimation"));
 	SGLevelScriptActor->OnQuestComplete.AddUFunction(this, TEXT("SetQuestTextColorForComplete"));
 }

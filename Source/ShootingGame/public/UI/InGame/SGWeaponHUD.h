@@ -13,15 +13,16 @@ class SHOOTINGGAME_API USGWeaponHUD : public UUserWidget
 	GENERATED_BODY()
 	
 public:
+	void SetCurrentWeapon(class ASGWeapon* NewWeapon);
+	void BindPlayer(class ASGPlayer* NewPlayer);
+	void BindWeapon(class ASGWeapon* NewWeapon);
+
+private:
 	UFUNCTION()
 	void UpdateAmmo();
 
 	UFUNCTION()
 	void UpdateWeapon();
-
-	void SetCurrentWeapon(class ASGWeapon* NewWeapon);
-	void BindPlayer(class ASGPlayer* NewPlayer);
-	void BindWeapon(class ASGWeapon* NewWeapon);
 
 private:
 	UPROPERTY(meta = (BindWidget))

@@ -13,9 +13,9 @@ void ASGColosseum::BeginPlay()
 
 	for (const auto& Boss : TActorRange<ASGBoss>(GetWorld()))
 	{
-		Boss->OnDead.AddDynamic(this, &ASGColosseum::AddAttainmentCount);
-		Boss->OnDead.AddDynamic(this, &ASGColosseum::PlayGameClearAnimation);
-		Boss->OnDead.AddDynamic(this, &ASGColosseum::DeleteSaveData);
+		Boss->OnDead.AddUFunction(this, TEXT("AddAttainmentCount"));
+		Boss->OnDead.AddUFunction(this, TEXT("PlayGameClearAnimation"));
+		Boss->OnDead.AddUFunction(this, TEXT("DeleteSaveData"));
 		++ObjectiveCount;
 	}
 

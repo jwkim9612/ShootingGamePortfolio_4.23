@@ -27,8 +27,10 @@ public:
 	float PlayFadeDiedAnimation();
 	float PlayFadeGameClearAnimation();
 
+public:
 	void SetControllingPawn(APawn* aPawn);
 
+public:
 	class USGHPBar* GetSGHPBar() const;
 	class USGHPBar* GetSGBossHPBar() const;
 	class USGCrossHair* GetSGCrossHair() const;

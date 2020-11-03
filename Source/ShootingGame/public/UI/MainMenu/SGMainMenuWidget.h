@@ -26,6 +26,9 @@ private:
 	void OnExitClicked();
 
 private:
+	void SetContinueButton();
+
+private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* NewGameButton;
 
@@ -35,6 +38,7 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* ExitButton;
 
+private:
 	UPROPERTY()
 	class USGGameInstance* SGGameInstance;
 

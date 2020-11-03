@@ -13,10 +13,6 @@ class SHOOTINGGAME_API USGBossAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
-	virtual void NativeBeginPlay() override;
-	//virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-public:
 	void SetDead();
 
 private:

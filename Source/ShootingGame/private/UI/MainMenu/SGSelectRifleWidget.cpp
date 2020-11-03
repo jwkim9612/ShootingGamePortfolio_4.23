@@ -2,7 +2,6 @@
 #include "SGMainMenuPlayerController.h"
 #include "SGWeaponButton.h"
 #include "SGGameInstance.h"
-#include "UIService.h"
 #include "Components/Button.h"
 
 void USGSelectRifleWidget::NativeConstruct()
@@ -13,7 +12,7 @@ void USGSelectRifleWidget::NativeConstruct()
 
 void USGSelectRifleWidget::UpdateWeaponButtons()
 {
-	int WeaponButtonCount = FMath::Clamp(WeaponNameList.Num(), 1, UIService::MaxCountOfWeaponSelectButtonPerPage);
+	int WeaponButtonCount = FMath::Clamp(WeaponNameList.Num(), 1, MaxCountOfWeaponSelectButtonPerPage);
 
 	for (int WeaponIndex = 0; WeaponIndex < WeaponButtonCount; ++WeaponIndex)
 	{

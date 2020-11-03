@@ -87,7 +87,7 @@ bool UBTTask_TurnToActor::IsDone()
 	int32 Int_LookYaw = static_cast<int32>(LookAtYaw);
 	int32 Int_Difference = FMath::Abs(Int_ControllingPawnYaw) - FMath::Abs(Int_LookYaw);
 
-	if (Int_Difference == 0)
+	if (Int_Difference <= 1)
 		return true;
 	
 	return false;

@@ -12,8 +12,4 @@ public:
 	static const float DefaultMaxSpeed;
 	static const float DefaultProjectileGravityScale;
 	static const float BossInitialSpeed;
-
-	static const float PitchValueForShape;
-
-	static const float DisableTimer;
 };

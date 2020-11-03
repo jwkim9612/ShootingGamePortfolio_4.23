@@ -17,7 +17,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Fire(const FVector& TargetLocation) override;
 
@@ -37,6 +36,7 @@ private:
 	UFUNCTION()
 	void SetDestroyTimer();
 
+private:
 	void CreateWeapon();
 	void Dead();
 

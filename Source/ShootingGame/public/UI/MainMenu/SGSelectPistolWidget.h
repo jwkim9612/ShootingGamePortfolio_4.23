@@ -11,7 +11,7 @@ UCLASS()
 class SHOOTINGGAME_API USGSelectPistolWidget : public USGSelectWeaponWidget
 {
 	GENERATED_BODY()
-	
+
 protected:
 	virtual void NativeConstruct() override;
 

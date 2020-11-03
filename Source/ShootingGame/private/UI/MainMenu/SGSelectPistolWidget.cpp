@@ -3,7 +3,6 @@
 #include "SGWeaponButton.h"
 #include "SGGameInstance.h"
 #include "SGSaveGame.h"
-#include "UIService.h"
 #include "Components/Button.h"
 
 void USGSelectPistolWidget::NativeConstruct()
@@ -14,7 +13,7 @@ void USGSelectPistolWidget::NativeConstruct()
 
 void USGSelectPistolWidget::UpdateWeaponButtons()
 {
-	int WeaponButtonCount = FMath::Clamp(WeaponNameList.Num(), 1, UIService::MaxCountOfWeaponSelectButtonPerPage);
+	int WeaponButtonCount = FMath::Clamp(WeaponNameList.Num(), 1, MaxCountOfWeaponSelectButtonPerPage);
 
 	for (int WeaponIndex = 0; WeaponIndex < WeaponButtonCount; ++WeaponIndex)
 	{
@@ -38,8 +37,6 @@ void USGSelectPistolWidget::OnSelectClicked()
 	}
 
 	SGGameInstance->LoadStage();
-
-	//UGameplayStatics::OpenLevel(this, TEXT("Test"));
 }
 
 void USGSelectPistolWidget::OnBackClicked()

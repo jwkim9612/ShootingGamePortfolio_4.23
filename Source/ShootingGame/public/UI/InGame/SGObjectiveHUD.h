@@ -18,16 +18,16 @@ public:
 public:
 	void PlayFadeAnimation();
 	float GetFadeAnimationLength();
-	
+	void SetQuestText(FString& NewQuestString);
+	void UpdateTitleAndObjetiveText();
+	void UpdateQuestText();
+
+private:
 	UFUNCTION()
 	void PlayFadeOpenedPortalAnimation();
 	
 	UFUNCTION()
 	void SetQuestTextColorForComplete();
-
-	void UpdateTitleAndObjetiveText();
-	void SetQuestText(FString& NewQuestString);
-	void UpdateQuestText();
 
 private:
 	UPROPERTY(meta = (BindWidget))

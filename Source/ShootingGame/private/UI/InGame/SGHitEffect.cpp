@@ -3,6 +3,5 @@
 void USGHitEffect::PlayFadeAnimation()
 {
 	SGCHECK(Fade);
-	
 	PlayAnimation(Fade);
 }

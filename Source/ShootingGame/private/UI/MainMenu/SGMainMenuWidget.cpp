@@ -9,21 +9,15 @@ void USGMainMenuWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	SGMainMenuPlayerController = Cast<ASGMainMenuPlayerController>(GetOwningPlayer());
+	SGCHECK(SGMainMenuPlayerController);
+
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
+	SGCHECK(SGGameInstance);
 
 	NewGameButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnNewGameClicked);
 	ExitButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnExitClicked);
 	
-	SGSaveGame = SGGameInstance->GetSaveData();
-	if (SGSaveGame != nullptr)
-	{
-		ContinueButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnContinueClicked);
-		ContinueButton->SetVisibility(ESlateVisibility::Visible);
-	}
-	else
-	{
-		ContinueButton->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	SetContinueButton();
 }
 
 void USGMainMenuWidget::OnNewGameClicked()
@@ -45,4 +39,18 @@ void USGMainMenuWidget::OnExitClicked()
 	SGLOG(Warning, TEXT("Quit"));
 	// 에디터까지 종료
 	//FGenericPlatformMisc::RequestExit(true);
+}
+
+void USGMainMenuWidget::SetContinueButton()
+{
+	SGSaveGame = SGGameInstance->GetSaveData();
+	if (SGSaveGame != nullptr)
+	{
+		ContinueButton->OnClicked.AddDynamic(this, &USGMainMenuWidget::OnContinueClicked);
+		ContinueButton->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		ContinueButton->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }

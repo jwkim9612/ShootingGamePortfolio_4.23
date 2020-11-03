@@ -1,10 +1,6 @@
 #include "SGAICharacterBase.h"
 #include "SGPlayer.h"
 
-ASGAICharacterBase::ASGAICharacterBase()
-{
-}
-
 void ASGAICharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

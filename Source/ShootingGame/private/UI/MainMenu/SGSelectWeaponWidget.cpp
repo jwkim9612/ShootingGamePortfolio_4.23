@@ -2,7 +2,6 @@
 #include "SGMainMenuPlayerController.h"
 #include "SGWeaponButton.h"
 #include "SGGameInstance.h"
-#include "UIService.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
@@ -13,7 +12,10 @@ void USGSelectWeaponWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	SGMainMenuPlayerController = Cast<ASGMainMenuPlayerController>(GetOwningPlayer());
+	SGCHECK(SGMainMenuPlayerController);
+
 	SGGameInstance = Cast<USGGameInstance>(GetGameInstance());
+	SGCHECK(SGGameInstance);
 
 	SelectButton->OnClicked.AddUniqueDynamic(this, &USGSelectWeaponWidget::OnSelectClicked);
 	BackButton->OnClicked.AddUniqueDynamic(this, &USGSelectWeaponWidget::OnBackClicked);
@@ -79,7 +81,7 @@ void USGSelectWeaponWidget::CreateWeaponButtonList()
 	if (WeaponButtonList.Num() == 0)
 	{
 		// 최대 표시되는 무기 갯수에 맞게 무기버튼 생성.
-		for (int WeaponButtonIndex = 0; WeaponButtonIndex < UIService::MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
+		for (int WeaponButtonIndex = 0; WeaponButtonIndex < MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
 		{
 			WeaponButtonList.Emplace(CreateWidget<USGWeaponButton>(this, SGWeaponButton->GetClass()));
 		}
@@ -112,7 +114,7 @@ void USGSelectWeaponWidget::CreateWeaponButtonList()
 		return;
 	}
 
-	PageCount = FMath::Clamp(WeaponNameCount - UIService::MaxCountOfWeaponSelectButtonPerPage + 1, 1, WeaponNameCount - UIService::MaxCountOfWeaponSelectButtonPerPage + 1);
+	PageCount = FMath::Clamp(WeaponNameCount - MaxCountOfWeaponSelectButtonPerPage + 1, 1, WeaponNameCount - MaxCountOfWeaponSelectButtonPerPage + 1);
 	CurrentPage = 1;
 
 	//한 페이지의 최대 버튼 수 보다 같거나 작을 때
@@ -128,7 +130,7 @@ void USGSelectWeaponWidget::CreateWeaponButtonList()
 		}
 
 		// 나머지 버튼 숨기기.
-		for (; WeaponButtonIndex < UIService::MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
+		for (; WeaponButtonIndex < MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
 		{
 			WeaponButtonList[WeaponButtonIndex]->SetVisibility(ESlateVisibility::Collapsed);
 		}

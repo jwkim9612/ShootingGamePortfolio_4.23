@@ -16,7 +16,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
@@ -24,7 +23,11 @@ public:
 
 private:
 	void CreateProjectilePool();
+	void UpdateHPBar();
+	void SetHPToDamage(float Damage);
+	void FadeOutHPBar();
 
+private:
 	UFUNCTION()
 	void SetDead();
 
@@ -50,5 +53,4 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Projectile", meta = (AllowPrivateAccess = true))
 	int32 ProjectilePoolSize;
 	int32 ProjectileIndex;
-
 };

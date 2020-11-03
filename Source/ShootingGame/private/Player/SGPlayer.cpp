@@ -445,36 +445,25 @@ void ASGPlayer::SprintOff()
 
 void ASGPlayer::SpreadCrossHair()
 {
+	float SpreadValue = 0.0f;
+
 	if (bIsAimDownSight)
-	{
-		if (IsMoving())
-		{
-			SGCrossHair->SetCurrentSpreadValue(40.0f);
-		}
-		else
-		{
-			SGCrossHair->SetCurrentSpreadValue(20.0f);
-		}
-	}
+		SpreadValue = PlayerService::DefaultAimSpreadValue;
 	else
-	{
-		if (IsMoving())
-		{
-			SGCrossHair->SetCurrentSpreadValue(80.0f);
-		}
-		else
-		{
-			SGCrossHair->SetCurrentSpreadValue(50.0f);
-		}
-	}
+		SpreadValue = PlayerService::DefaultUnAimSpreadValue;
+
+	if (IsMoving())
+		SpreadValue *= 8.0f;
+	else
+		SpreadValue *= 4.0f;
+
+	SGCrossHair->SetCurrentSpreadValue(SpreadValue);
 }
 
 bool ASGPlayer::IsMoving() const
 {
 	if (GetCharacterMovement()->Velocity.Size() > 0)
-	{
 		return true;
-	}
 
 	return false;
 }
@@ -530,9 +519,7 @@ void ASGPlayer::SelectWeapon(ASGWeapon * Weapon)
 {
 	SGCHECK(Weapon);
 	if (CurrentWeapon == Weapon || bIsEquipping || bIsSprint || GetCharacterMovement()->IsFalling())
-	{
 		return;
-	}
 
 	if (bIsReloading)
 	{

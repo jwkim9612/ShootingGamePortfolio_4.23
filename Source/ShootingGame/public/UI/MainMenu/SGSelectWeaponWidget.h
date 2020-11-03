@@ -35,9 +35,8 @@ protected:
 	UFUNCTION()
 	void OnPreviousClicked();
 
+protected:
 	virtual void UpdateWeaponButtons();
-
-private:
 	void CreateWeaponButtonList();
 	void UpdatePageButtonsVisibility();
 
@@ -63,14 +62,19 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* SelectedWeaponText;
 
+protected:
 	UPROPERTY()
 	class ASGMainMenuPlayerController* SGMainMenuPlayerController;
 
 	UPROPERTY()
 	class USGGameInstance* SGGameInstance;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = true))
 	TArray<FString> WeaponNameList;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (AllowPrivateAccess = true))
+	int32 MaxCountOfWeaponSelectButtonPerPage;
 
 	UPROPERTY()
 	TArray<class USGWeaponButton*> WeaponButtonList;

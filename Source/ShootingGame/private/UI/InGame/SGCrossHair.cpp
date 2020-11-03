@@ -1,12 +1,12 @@
 #include "SGCrossHair.h"
+#include "PlayerService.h"
 #include "Components/VerticalBox.h"
 
 void USGCrossHair::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	SetCurrentSpreadValue(20.0f);
-	SetDefaultSpreadValue(20.0f);
+	SetDefaultSpreadValue(PlayerService::DefaultUnAimSpreadValue);
 }
 
 void USGCrossHair::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

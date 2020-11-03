@@ -1,5 +1,6 @@
 #include "SGAIController.h"
 #include "SGAICharacter.h"
+#include "AIService.h"
 #include "SGPlayer.h"
 #include "BehaviorTree/BlackboardData.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -49,7 +50,7 @@ void ASGAIController::BeginPlay()
 		if (RunBehaviorTree(BehaviorTree))
 		{
 			Blackboard->SetValueAsVector(OriginLocationKey, SGAICharacter->GetActorLocation());
-			Blackboard->SetValueAsVector(PatrolLocationKey, SGAICharacter->GetActorLocation() + SGAICharacter->GetActorForwardVector() * 500.0f);
+			Blackboard->SetValueAsVector(PatrolLocationKey, SGAICharacter->GetActorLocation() + SGAICharacter->GetActorForwardVector() * AIService::PatrolDistance);
 		}
 	}
 }

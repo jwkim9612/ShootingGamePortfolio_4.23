@@ -11,7 +11,7 @@
 
 ASGBoss::ASGBoss()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// 캐릭터 제작시 3차원 좌표계가 언리얼 3차원 좌표계와 다르기 때문에 Z축으로 -90도 회전시켜줘야한다
 	// 또 액터의 기준 위치가 다르기 때문에 Z축으로 절반 높이만큼 내려줘야 한다.
@@ -31,34 +31,25 @@ void ASGBoss::BeginPlay()
 	SGBossAnimInstance = Cast<USGBossAnimInstance>(GetMesh()->GetAnimInstance());
 	SGBossAIController = Cast<ASGBossAIController>(GetController());
 	SGPlayerController = Cast<ASGPlayerController>(GetGameInstance()->GetPrimaryPlayerController());
-	if (SGPlayerController != nullptr)
-	{
-		SGPlayerController->GetSGHUDWidget()->GetSGBossHPBar()->SetHPProgressBar(GetHPRatio());
-	}
-	
-	OnDead.AddDynamic(this, &ASGBoss::SetDead);
-	OnDead.AddDynamic(this, &ASGBoss::SetDeadCollision);
 
+	OnDead.AddUFunction(this, TEXT("SetDead"));
+	OnDead.AddUFunction(this, TEXT("SetDeadCollision"));
+
+	UpdateHPBar();
 	CreateProjectilePool();
-}
-
-void ASGBoss::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 float ASGBoss::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
 	float FinalDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 
-	CurrentHealth = FMath::Clamp(CurrentHealth - static_cast<int>(Damage), 0, CurrentHealth);
-	SGPlayerController->GetSGHUDWidget()->GetSGBossHPBar()->SetHPProgressBar(GetHPRatio());
+	SetHPToDamage(Damage);
+	UpdateHPBar();
 
 	if (CurrentHealth <= 0)
 	{
 		OnDead.Broadcast();
-		SGPlayerController->GetSGHUDWidget()->PlayFadeOutBossHPBarAnimation();
+		FadeOutHPBar();
 	}
 
 	return FinalDamage;
@@ -103,14 +94,26 @@ void ASGBoss::CreateProjectilePool()
 	ProjectileIndex = 0;
 }
 
+void ASGBoss::UpdateHPBar()
+{
+	SGCHECK(SGBossAIController);
+	SGPlayerController->GetSGHUDWidget()->GetSGBossHPBar()->SetHPProgressBar(GetHPRatio());
+}
+
+void ASGBoss::SetHPToDamage(float Damage)
+{
+	CurrentHealth = FMath::Clamp(CurrentHealth - static_cast<int>(Damage), 0, CurrentHealth);
+}
+
+void ASGBoss::FadeOutHPBar()
+{
+	SGCHECK(SGPlayerController);
+	SGPlayerController->GetSGHUDWidget()->PlayFadeOutBossHPBarAnimation();
+}
+
 void ASGBoss::SetDead()
 {
-	if (SGBossAnimInstance == nullptr)
-	{
-		SGLOG(Warning, TEXT("SGBossAnimInstance is null!!"));
-		return;
-	}
-
+	SGCHECK(SGBossAnimInstance);
 	SGBossAnimInstance->SetDead();
 }
 

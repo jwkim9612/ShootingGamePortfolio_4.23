@@ -27,30 +27,16 @@ void ASGAICharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	SGAIController = Cast<ASGAIController>(GetController());
-	if (SGAIController == nullptr)
-	{
-		SGLOG(Warning, TEXT("No AIController!!"));
-		return;
-	}
+	SGCHECK(SGAIController);
 
 	SGAICharacterAnimInstance = Cast<USGAICharacterAnimInstance>(GetMesh()->GetAnimInstance());
-	if (SGAICharacterAnimInstance == nullptr)
-	{
-		SGLOG(Warning, TEXT("No AnimInstance!!"));
-		return;
-	}
+	SGCHECK(SGAICharacterAnimInstance);
 
-	OnDead.AddDynamic(this, &ASGAICharacter::DropItem);
-	OnDead.AddDynamic(this, &ASGAICharacter::SetDeadCollision);
-	OnDead.AddDynamic(this, &ASGAICharacter::SetDestroyTimer);
-
+	OnDead.AddUFunction(this, TEXT("DropItem"));
+	OnDead.AddUFunction(this, TEXT("SetDeadCollision"));
+	OnDead.AddUFunction(this, TEXT("SetDestroyTimer"));
+	
 	CreateWeapon();
-}
-
-void ASGAICharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 float ASGAICharacter::TakeDamage(float Damage, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
@@ -95,10 +81,8 @@ void ASGAICharacter::SetDropAmmoClass(WeaponType Type)
 		break;
 	}
 
-	if (SGAmmoBP != nullptr)
-	{
-		DropAmmo = SGAmmoBP->GeneratedClass;
-	}
+	SGCHECK(SGAmmoBP);
+	DropAmmo = SGAmmoBP->GeneratedClass;
 }
 
 bool ASGAICharacter::IsDead() const
@@ -113,10 +97,8 @@ USGAICharacterAnimInstance * ASGAICharacter::GetAnimInstance() const
 
 void ASGAICharacter::DropItem()
 {
-	if (DropAmmo != nullptr)
-	{
-		GetWorld()->SpawnActor<ASGAmmo>(DropAmmo, GetActorLocation(), FRotator::ZeroRotator);
-	}
+	SGCHECK(DropAmmo);
+	GetWorld()->SpawnActor<ASGAmmo>(DropAmmo, GetActorLocation(), FRotator::ZeroRotator);
 }
 
 void ASGAICharacter::SetDeadCollision()
@@ -158,9 +140,7 @@ void ASGAICharacter::CreateWeapon()
 void ASGAICharacter::Dead()
 {
 	if (bIsDead)
-	{
 		return;
-	}
 
 	bIsDead = true;
 	OnDead.Broadcast();

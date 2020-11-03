@@ -9,7 +9,7 @@ void ASGBunker::BeginPlay()
 	
 	for (const auto& AICharacter : TActorRange<ASGAICharacter>(GetWorld()))
 	{
-		AICharacter->OnDead.AddDynamic(this, &ASGBunker::AddAttainmentCount);
+		AICharacter->OnDead.AddUFunction(this, TEXT("AddAttainmentCount"));
 		++ObjectiveCount;
 	}
 

@@ -4,15 +4,12 @@
 #include "GameFramework/Character.h"
 #include "SGAICharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeadDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnDeadDelegate);
 
 UCLASS()
 class SHOOTINGGAME_API ASGAICharacterBase : public ACharacter
 {
 	GENERATED_BODY()
-
-public:
-	ASGAICharacterBase();
 
 protected:
 	virtual void BeginPlay() override;
