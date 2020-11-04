@@ -102,7 +102,7 @@ void ASGPlayer::Tick(float DeltaSeconds)
 	/////////// 카메라 부드럽게 처리 ///////////////////////////////////////////
 	SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, ArmLengthTo, DeltaSeconds, ArmLengthSpeed);
 	SpringArm->SetRelativeLocation(FMath::VInterpTo(SpringArm->GetRelativeTransform().GetLocation(), ArmLocation, DeltaSeconds, ArmLengthSpeed));
-	
+
 	// 사망시에 Mesh를 Ragdoll로 바꿔서 다른곳으로 이동하는데 Capsule은 가만히 있음. 
 	// 그런데 카메라가 Capsule을 따라가기 때문에 Capsule을 Mesh 위치로 이동.
 	if (bIsDead)
@@ -556,7 +556,6 @@ void ASGPlayer::SetDead()
 	GetMesh()->SetSimulatePhysics(true);
 	DisableInput(SGPlayerController);
 	SetCamera(CameraMode::Dead);
-	TeamId = FGenericTeamId(1);
 
 	float DiedAnimationLength = SGPlayerController->GetSGHUDWidget()->PlayFadeDiedAnimation();
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {

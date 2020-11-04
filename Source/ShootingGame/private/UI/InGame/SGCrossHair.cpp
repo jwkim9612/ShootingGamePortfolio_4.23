@@ -42,3 +42,4 @@ void USGCrossHair::SpreadCrossHair(float NewSpreadValue)
 	Left->SetRenderTranslation(FVector2D(-NewSpreadValue, 0.0f));
 	Right->SetRenderTranslation(FVector2D(NewSpreadValue, 0.0f));
 }
+

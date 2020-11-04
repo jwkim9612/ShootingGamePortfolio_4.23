@@ -56,7 +56,7 @@ void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * Ot
 	SGCHECK(SGPlayerState);
 
 	SGPlayerState->SavePlayerData();
-	SetLoadStageTimer(AnimationLength);
+	SetLoadNextStageTimer(AnimationLength);
 
 	ASGPlayer* SGPlayer = Cast<ASGPlayer>(SGPlayerController->GetPawn());
 	if (SGPlayer != nullptr)
@@ -65,7 +65,7 @@ void ASGPortal::OnOverlapBegin(UPrimitiveComponent * OverlappedComp, AActor * Ot
 	}
 }
 
-void ASGPortal::SetLoadStageTimer(float LoadStageTimer)
+void ASGPortal::SetLoadNextStageTimer(float LoadStageTimer)
 {
 	GetWorld()->GetTimerManager().SetTimer(LoadStageTimerHandle, FTimerDelegate::CreateLambda([this]() -> void {
 		SGGameInstance->LoadNextStage();

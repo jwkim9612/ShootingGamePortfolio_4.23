@@ -23,7 +23,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Montage", meta = (AllowPrivateAccess = true))
 	UAnimMontage* AnimMontage;
 
-	UPROPERTY(EditAnywhere, Category = "Fire", meta = (AllowPrivateAccess = true, UIMin = 1, ClampMin = 1))
+	UPROPERTY(EditAnywhere, Category = "Montage", meta = (AllowPrivateAccess = true, UIMin = 1, ClampMin = 1))
 	int32 Count = 1;
 
 private:

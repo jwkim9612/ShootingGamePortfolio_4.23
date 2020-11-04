@@ -121,16 +121,8 @@ void USGSelectWeaponWidget::CreateWeaponButtonList()
 	//if (WeaponNameCount <= UIService::MaxCountOfWeaponSelectButtonPerPage)
 	if (PageCount == 1)
 	{
-		int WeaponButtonIndex;
-
-		// 버튼 갯수에 맞게 설정.
-		for (WeaponButtonIndex = 0; WeaponButtonIndex < WeaponNameCount; ++WeaponButtonIndex)
-		{
-			// 버튼 설정.
-		}
-
 		// 나머지 버튼 숨기기.
-		for (; WeaponButtonIndex < MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
+		for (int WeaponButtonIndex = WeaponNameCount; WeaponButtonIndex < MaxCountOfWeaponSelectButtonPerPage; ++WeaponButtonIndex)
 		{
 			WeaponButtonList[WeaponButtonIndex]->SetVisibility(ESlateVisibility::Collapsed);
 		}

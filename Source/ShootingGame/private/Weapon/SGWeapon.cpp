@@ -235,7 +235,7 @@ void ASGWeapon::CreateProjectilePool()
 			Projectile->SetController(Controller);
 			Projectile->SetControllingPawn(ControllingPawn);
 			Projectile->Disable();
-			ProjectilePool.Emplace(Projectile);
+			ProjectilePool.Push(Projectile);
 		}
 	}
 }
